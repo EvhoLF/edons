@@ -1,0 +1,46 @@
+.PNM {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-width: 250px;
+
+  &_title {
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  &_item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+  }
+
+  &_itemHalfs {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  &_template_item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 15px;
+    align-items: center;
+    text-align: start;
+  }
+}
+
+.fileInfo {
+  &_item {
+    font-size: 12px;
+  }
+}
+
+.PNM_ic {
+  width: 24px;
+  height: 24px;
+}

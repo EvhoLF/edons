@@ -1,0 +1,48 @@
+.Map {
+  width: 100vw;
+  height: 100vh;
+  background: #18181b;
+}
+
+.orientation {
+  display: flex;
+  gap: 5px;
+}
+
+.MiniMap {
+  // aspect-ratio: 16/9;
+  // scale: .5;
+  border-radius: 10px;
+  overflow: hidden;
+
+  // background: rgb(22, 22, 39, 0.4) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(4px) !important;
+  backdrop-filter: saturate(180%) blur(5px) !important;
+}
+
+.xyflowControls {
+  width: 200px;
+  display: flex;
+  flex-direction: row !important;
+  margin-bottom: 175px;
+  // background: #252535;
+  gap: 5px;
+
+}
+
+.xyflowControls * {
+  border: none;
+}
+
+.Panel_PanelTools {
+  height: 100%;
+  // display: flex;
+  // align-items: center;
+}
+
+.glass {
+  background: rgb(22, 22, 39, 0.4) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(4px) !important;
+  backdrop-filter: saturate(180%) blur(5px) !important;
+  border-width: 1px !important;
+}

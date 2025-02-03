@@ -1,0 +1,41 @@
+.Button {
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: fit-content;
+  height: 100%;
+
+
+  padding: 5px;
+  border-radius: 5px;
+  // border: var(--light-border);
+  // background: var(--color-light-bg);
+
+  // background: rgb(22, 22, 39, 0.4);
+  // -webkit-backdrop-filter: saturate(180%) blur(4px);
+  // backdrop-filter: saturate(180%) blur(5px);
+  background: none;
+  border: 1px solid #353555;
+
+  color: var(--color-text-primary);
+
+  transition: .2s;
+
+  outline: none;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--color-light-bg-alt1);
+    border-color: var(--color-light-border-alt1);
+    scale: 1.05;
+  }
+
+  &:active {
+    background: var(--color-light-bg-alt2);
+    border-color: var(--color-light-border-alt2);
+    scale: 0.95;
+  }
+}

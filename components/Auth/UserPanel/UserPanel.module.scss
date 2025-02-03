@@ -1,0 +1,33 @@
+.UserPanel_wrap{
+  padding: 5px 10px;
+}
+
+.UserPanel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  position: relative;
+  border-radius: 1000%;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border: 1px solid #557;
+  margin: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 16px;
+}
+.username {
+  font-size: 14px;
+  font-weight: bold;
+}
+.name {
+  font-size: 12px;
+}

@@ -1,0 +1,10 @@
+.APanel {
+  padding: 10px;
+  background: #252535;
+  border: 1px solid #334;
+  border-radius: 10px;
+
+  background: rgb(22, 22, 39, 0.4);
+  -webkit-backdrop-filter: saturate(180%) blur(4px);
+  backdrop-filter: saturate(180%) blur(5px);
+}
