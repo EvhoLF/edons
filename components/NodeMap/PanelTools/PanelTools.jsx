@@ -6,7 +6,7 @@ import DnD from '@/components/DnD/DnD';
 import { tNodeCode } from '@/data/NodeTemplates/tNodeCode';
 import { tNodeShape } from '@/data/NodeTemplates/tNodeShape';
 import Menus, { MenusButton, MenusMenu } from '@/components/UI/Menus/Menus';
-import APanel from '@/components/UI/APanel/APanel';
+import Frame from '@/components/UI/Frame/Frame';
 import { Icon } from '@/components/UI/Icon/Icon';
 import Button from '@/components/UI/Button/Button';
 
@@ -58,7 +58,7 @@ const PanelAddNode = () => {
             </div>
           </MenusButton>
           <MenusMenu>
-            <APanel className={styles.PanelTools}>
+            <Frame className={styles.PanelTools}>
               {
                 Object.values(tNodeShape).map(e => (
                   <div key={e.id} className={styles.tools_button}>
@@ -70,7 +70,7 @@ const PanelAddNode = () => {
                   </div>
                 ))
               }
-            </APanel>
+            </Frame>
           </MenusMenu>
         </Menus>
       </div>

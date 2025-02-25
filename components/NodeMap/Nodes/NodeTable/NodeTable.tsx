@@ -1,3 +1,4 @@
+'use client'
 import { ChangeEvent, memo } from 'react';
 import { Handle, Position, NodeToolbar } from '@xyflow/react';
 import styles from './NodeTable.module.scss'

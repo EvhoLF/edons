@@ -1,41 +1,243 @@
-.Button {
-  position: relative;
+// Переменные для повторяющихся значений
+$transition: all $transition-slow;
+$gradient-bg: $gradient-primary;
+$glass-bg: $gradient-glass-primary-saturated;
+$z-content: $z-input-content;
+$z-t1: $z-input-t1;
+$z-t2: $z-input-t2;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+// Миксин для градиентного фона
+@mixin GradientBG {
+  overflow: hidden;
+  color: $color-ui-primary;
+  background: transparent;
 
-  width: fit-content;
-  height: 100%;
+  .content {
+    z-index: $z-content;
+  }
 
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: $gradient-bg;
+    opacity: 1;
+    transition: $transition;
+    z-index: $z-t1;
+  }
+}
 
-  padding: 5px;
-  border-radius: 5px;
-  // border: var(--light-border);
-  // background: var(--color-light-bg);
+// Миксин для кнопок с обводкой
+@mixin OutlinedButton {
+  background: transparent;
+  transition: $transition;
 
-  // background: rgb(22, 22, 39, 0.4);
-  // -webkit-backdrop-filter: saturate(180%) blur(4px);
-  // backdrop-filter: saturate(180%) blur(5px);
-  background: none;
-  border: 1px solid #353555;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transition: $transition;
+    z-index: $z-t1;
+  }
 
-  color: var(--color-text-primary);
+  &::before {
+    border: $border-width-lg solid transparent;
+    background: $gradient-bg border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
 
-  transition: .2s;
+  &::after {
+    background: $gradient-bg;
+    opacity: 0;
+    z-index: $z-t2;
+  }
 
-  outline: none;
+  .content {
+    @include GradientText;
+    @include GradientSvg;
+    z-index: $z-content;
+    animation: colorChange 0.5s ease forwards;
+  }
 
-  &:hover,
-  &:focus-visible {
-    background: var(--color-light-bg-alt1);
-    border-color: var(--color-light-border-alt1);
-    scale: 1.05;
+  &:active,
+  &:hover {
+    &::before {
+      opacity: 0;
+    }
+
+    &::after {
+      opacity: 1;
+    }
+
+    .content {
+      background: transparent;
+      -webkit-text-fill-color: initial;
+      background-clip: initial;
+      animation: colorChangeHover 0.5s ease forwards;
+    }
+
+    svg {
+      fill: currentColor;
+    }
   }
 
   &:active {
-    background: var(--color-light-bg-alt2);
-    border-color: var(--color-light-border-alt2);
-    scale: 0.95;
+    background: #000;
+
+    &::after {
+      opacity: 0.55;
+    }
+  }
+}
+
+// Базовые стили для кнопок
+.Button {
+  @include BorderRadius;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: $transition;
+  gap: $spacing-sm;
+  text-decoration: none;
+  outline: none;
+  overflow: hidden;
+
+  &:focus-visible {
+    outline: 1px solid $color-ui-primary;
+    outline-offset: 3px;
+    transform: scale(1.05);
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.text {
+    @include GradientText;
+    @include GradientSvg;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: $gradient-primary;
+      // background: $color-primary;
+      opacity: 0;
+      transition: $transition;
+    }
+
+    &:hover {
+      &::before {
+        opacity: .2;
+      }
+    }
+
+    &:active {
+      &::before {
+        opacity: .4;
+      }
+    }
+  }
+
+  &.filled {
+    @include GradientBG;
+
+    &:hover,
+    &:active {
+      background: #000;
+
+      &::before {
+        opacity: 0.75;
+      }
+    }
+
+    &:active {
+      &::before {
+        opacity: 0.55;
+      }
+    }
+  }
+
+  &.outlined,
+  &.colorGlass {
+    @include OutlinedButton;
+  }
+
+  &.colorGlass {
+    background: transparent;
+
+    &::after {
+      background: $glass-bg;
+      opacity: .15;
+    }
+
+    &::before {
+      opacity: .1;
+    }
+  }
+
+  // Размеры кнопок
+  @each $size in (x, s, m, l) {
+    &.#{$size} {
+      @include ButtonSize($size);
+    }
+  }
+
+  // Квадратные кнопки
+  &.square {
+    aspect-ratio: 1/1;
+  }
+
+  // Дополнительные стили
+  &.uppercase {
+    text-transform: uppercase;
+  }
+
+  &.activeDynamic {
+    transition: $transition, transform $transition-medium;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &.fillX {
+    width: 100%;
+  }
+}
+
+// Стили для контента кнопок
+.content {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.iconLeft,
+.iconRight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes colorChangeHover {
+  0% {
+    color: $color-primary-dark;
+  }
+
+  100% {
+    color: $color-ui-primary;
   }
 }

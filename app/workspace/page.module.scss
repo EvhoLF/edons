@@ -1,0 +1,93 @@
+.Worksapce{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 50px;
+}
+
+.Worksapce_panel{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.Worksapce_grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: $spacing-md;
+}
+
+.cardMap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+
+  &_content {
+    max-height: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all $transition-medium ease-in-out;
+    overflow: hidden;
+  }
+
+  &_label{
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.options {
+  position: absolute;
+  inset: 0;
+  margin: $spacing-sm;
+  display: flex;
+  justify-content: end;
+  // gap: $spacing-sm;
+  transition: all $transition-medium ease-in-out;
+
+  &_item {
+    width: 0; // Начальная ширина 0
+    opacity: 0; // Начальная прозрачность 0
+    // overflow: hidden; // Скрываем содержимое
+    gap: $spacing-sm;
+    transition: all $transition-medium ease-in-out;
+    display: flex; // Убедимся, что элемент flex
+    align-items: start; // Выравниваем элементы по центру
+
+    &.active {
+      width: 30px; // Активные элементы всегда видны
+      opacity: 1;
+    }
+  }
+}
+
+.copyLink {
+  opacity: 0;
+  transition: opacity $transition-medium;
+}
+
+.active {
+  .btnStar.btnStar svg {
+    fill: #ff0;
+  }
+
+  .btnLink.btnLink svg {
+    fill: #0ff;
+  }
+}
+
+.cardMap:hover,
+.cardMap:focus-within{
+  .options_item {
+    width: 30px; // Ширина при наведении
+    opacity: 1; // Плавное появление
+  }
+
+  .copyLink {
+    opacity: 1;
+  }
+}

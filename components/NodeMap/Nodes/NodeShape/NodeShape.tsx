@@ -1,3 +1,4 @@
+'use client'
 import { NodeResizer, type NodeProps, useStore, Handle, Position, useKeyPress, } from '@xyflow/react';
 import { ChangeEvent, memo, useEffect, useRef } from 'react';
 import { ShapeNode } from './Shape/types/_index';

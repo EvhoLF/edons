@@ -17,8 +17,6 @@ const Edge = (z) => {
   const sourceColor = data?.sourceColor || '#fff';
   const targetColor = data?.targetColor || '#fff';
 
-  console.log('x');
-
 
   // Создаем градиентный ID
   const gradientId = `gradient-${id}`;

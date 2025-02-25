@@ -2,7 +2,7 @@ import Image from 'next/image';
 import styles from './UserPanel.module.scss'
 import Button from '@/components/UI/Button/Button';
 import useGithub from '@/hooks/useGithub';
-import APanel from '@/components/UI/APanel/APanel';
+import Frame from '@/components/UI/Frame/Frame';
 
 export const UserPanel = () => {
   const { session, auth } = useGithub();
@@ -11,7 +11,7 @@ export const UserPanel = () => {
 
 
   return (
-    <APanel className={styles.UserPanel_wrap}>
+    <Frame className={styles.UserPanel_wrap}>
       {
         session
           ? (
@@ -29,6 +29,6 @@ export const UserPanel = () => {
           : (<div> <Button onClick={auth.signIn}>LOG IN GITHUB</Button> </div>)
       }
 
-    </APanel>
+    </Frame>
   )
 };

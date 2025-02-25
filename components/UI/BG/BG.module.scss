@@ -1,0 +1,10 @@
+.BG {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-size: 120px;
+  background-repeat: repeat;
+  background-image: url(/ui/bg.png);
+  opacity: 0.06;
+  z-index: $z-index-bg;
+}

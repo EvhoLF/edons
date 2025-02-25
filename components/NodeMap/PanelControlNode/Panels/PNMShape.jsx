@@ -5,7 +5,7 @@ import Button from '@/components/UI/Button/Button';
 import { Icon } from '@/components/UI/Icon/Icon';
 import Input from '@/components/UI/Input/Input';
 import InputColor from '@/components/UI/InputColor/InputColor';
-import APanel from '@/components/UI/APanel/APanel';
+import Frame from '@/components/UI/Frame/Frame';
 import { tNodeCode } from '@/data/NodeTemplates/tNodeCode';
 import useRF from '@/hooks/useRF';
 
@@ -18,7 +18,7 @@ const PNMShape = ({ node }) => {
   const { updateNodeData } = useRF();
 
   return (
-    <APanel className={styles.PNM}>
+    <Frame className={styles.PNM}>
       <div className={styles.PNM_item}>
         <h3 className={styles.PNM_title}>Parameters</h3>
         <InputDrop className={styles.PNM_item_inputDrop}
@@ -35,7 +35,7 @@ const PNMShape = ({ node }) => {
           cols={1}
           tooltip='Templates'
         >
-          <Button> <Icon icon='template1' /></Button>
+          <Button> <Icon icon='template' /></Button>
         </InputDrop>
       </div>
       <div>
@@ -44,7 +44,7 @@ const PNMShape = ({ node }) => {
       <div>
         <Input Icon={<InputColor color={color} onChange={e => updateNodeData(id, { color: e })} />} placeholder='Color: #------' tooltip='color' value={color} onChange={e => updateNodeData(id, { color: e.target.value })} />
       </div>
-    </APanel >
+    </Frame >
   );
 };
 

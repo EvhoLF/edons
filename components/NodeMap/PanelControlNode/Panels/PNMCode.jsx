@@ -6,7 +6,7 @@ import { Icon } from '@/components/UI/Icon/Icon';
 import Input from '@/components/UI/Input/Input';
 import InputColor from '@/components/UI/InputColor/InputColor';
 import { data_codeTypes } from '@/data/data_codeTypes';
-import APanel from '@/components/UI/APanel/APanel';
+import Frame from '@/components/UI/Frame/Frame';
 import { tNodeCode } from '@/data/NodeTemplates/tNodeCode';
 import useRF from '@/hooks/useRF';
 import { icons_names } from '@/data/data_icons';
@@ -20,7 +20,7 @@ const PNMCode = ({ node }) => {
   const { updateNodeData } = useRF();
 
   return (
-    <APanel className={styles.PNM}>
+    <Frame className={styles.PNM}>
       <div className={styles.PNM_item}>
         <h3 className={styles.PNM_title}>Parameters</h3>
         <InputDrop className={styles.PNM_item_inputDrop}
@@ -37,7 +37,7 @@ const PNMCode = ({ node }) => {
           cols={1}
           tooltip='Templates'
         >
-          <Button> <Icon icon='template1' /></Button>
+          <Button square size='small' variant='outlined'> <Icon icon='template' /></Button>
         </InputDrop>
       </div>
       <div>
@@ -54,7 +54,7 @@ const PNMCode = ({ node }) => {
           cols='4'
           tooltip='Icon'
         >
-          <Button> <Icon icon={icon} /></Button>
+          <Button square size='small' variant='outlined'> <Icon icon={icon} /></Button>
         </InputDrop>
       </div>
 
@@ -75,7 +75,7 @@ const PNMCode = ({ node }) => {
         {/* <ButtonSwitch ItemOn={IconON} ItemOFF={IconOFF} value={visibleField.code} onClick={() => updateVisibleField(id, 'code')} /> */}
       </div>
 
-    </APanel >
+    </Frame >
   );
 };
 

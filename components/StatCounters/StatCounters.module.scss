@@ -1,0 +1,14 @@
+.StatCounters {
+  display: flex;
+  justify-content: space-between;
+}
+
+.el {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.num {
+  font-size: $font-size-h;
+}

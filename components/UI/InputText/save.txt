@@ -1,0 +1,176 @@
+import React, { InputHTMLAttributes, ReactNode } from 'react';
+import styles from './InputText.module.scss';
+import clsx from 'clsx';
+
+interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
+  required?: boolean,
+  error?: boolean;
+  success?: boolean;
+  startAdornment?: ReactNode;
+  endAdornment?: ReactNode;
+  helperText?: string;
+  label?: string;
+}
+
+const InputText: React.FC<InputTextProps> = ({
+  required,
+  error,
+  success,
+  startAdornment,
+  endAdornment,
+  helperText,
+  className,
+  label,
+  ...props
+}) => {
+  const required_el = required ? <span>*</span> : ''
+  return (
+    <div className={clsx(styles.InputText, className, {
+      [styles.error]: error,
+      [styles.success]: success,
+    })}>
+      <div className={styles.container}>
+        {startAdornment}
+        <label className={styles.label}>{label}{required_el} </label>
+        <input {...props} className={styles.input} />
+        {endAdornment}
+        <fieldset className={styles.fieldset}>
+          <legend className={styles.legend}>{label}{required_el}</legend>
+        </fieldset>
+      </div>
+      <span className={styles.helperText}>{helperText}</span>
+    </div>
+  );
+};
+
+export default InputText;
+
+
+.InputText {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  
+}
+
+.container {
+  position: relative;
+  padding: $spacing-md $spacing-md;
+  padding-top: calc($spacing-md + ($font-size-sm / 2));
+}
+
+.fieldset {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  padding: 0 calc($spacing-md - 8px);
+  border: 1px solid $color-light-primary-overdark;
+  border-radius: $border-radius-md;
+  transition: all $transition-fast;
+}
+
+.legend {
+  visibility: hidden;
+  padding: 0px calc($spacing-md - 8px);
+}
+
+.label,
+.legend {
+  display: inline-flex;
+  gap: $spacing-xs;
+  height: $font-size-sm;
+  font-size: $font-size-sm;
+  line-height: 1;
+  overflow: hidden;
+  font-weight: 600;
+}
+
+.label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0 $spacing-md;
+  transition: all $transition-fast;
+  color: $color-light-primary-overdark;
+}
+
+.input {
+  display: block;
+  background: transparent;
+  color: $color-light-primary;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  font-size: $font-size-md;
+  outline: none;
+  border: none;
+}
+
+.helperText {
+  padding-left: $spacing-md;
+  font-size: $font-size-sm;
+  line-height: 1;
+  height: $font-size-sm;
+}
+
+
+.InputText:hover {
+
+  .fieldset,
+  .label {
+    color: $color-light-primary-dark;
+    border-color: $color-light-primary-dark;
+  }
+}
+
+.InputText:focus-within {
+  .fieldset {
+    border-color: $color-primary;
+  }
+
+  .label {
+    color: $color-primary;
+  }
+}
+
+.InputText.error {
+
+  .fieldset,
+  .helperText,
+  .label {
+    color: $color-error;
+    border-color: $color-error;
+    // transition: all $transition-medium;
+  }
+
+  &:hover {
+
+    .fieldset,
+    .helperText,
+    .label {
+      color: $color-error-light;
+      border-color: $color-error-light;
+    }
+  }
+}
+
+.InputText.success {
+
+  .fieldset,
+  .helperText,
+  .label {
+    color: $color-success;
+    border-color: $color-success;
+  }
+
+  &:hover {
+
+    .fieldset,
+    .helperText,
+    .label {
+      color: $color-success-light;
+      border-color: $color-success-light;
+    }
+  }
+}

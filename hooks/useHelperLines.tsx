@@ -3,20 +3,25 @@ import { applyNodeChanges, Node, NodeChange } from "@xyflow/react";
 import { useCallback, useState } from "react";
 
 const useHelperLines = () => {
-  const [helperLineHorizontal, setHelperLineHorizontal] = useState<number | undefined>(undefined);
-  const [helperLineVertical, setHelperLineVertical] = useState<number | undefined>(undefined);
+  const [helperLineHorizontal, setHelperLineHorizontal] = useState<number | undefined>();
+  const [helperLineVertical, setHelperLineVertical] = useState<number | undefined>();
 
-  const HelperLines_ApplyNodeChanges = useCallback(
+  const applyHelperLinesChanges = useCallback(
     (changes: NodeChange[], nodes: Node[]): Node[] => {
       setHelperLineHorizontal(undefined);
       setHelperLineVertical(undefined);
 
-      if (changes.length === 1 && changes[0].type === "position" && changes[0].dragging && changes[0].position) {
-        const helperLines = getHelperLines(changes[0], nodes);
-        changes[0].position.x = helperLines.snapPosition.x ?? changes[0].position.x;
-        changes[0].position.y = helperLines.snapPosition.y ?? changes[0].position.y;
-        setHelperLineHorizontal(helperLines.horizontal);
-        setHelperLineVertical(helperLines.vertical);
+      if (changes.length === 1) {
+        const [change] = changes;
+        if (change.type === "position" && change.dragging && change.position) {
+          const { snapPosition, horizontal, vertical } = getHelperLines(change, nodes);
+
+          change.position.x = snapPosition.x ?? change.position.x;
+          change.position.y = snapPosition.y ?? change.position.y;
+
+          setHelperLineHorizontal(horizontal);
+          setHelperLineVertical(vertical);
+        }
       }
 
       return applyNodeChanges(changes, nodes);
@@ -24,7 +29,7 @@ const useHelperLines = () => {
     []
   );
 
-  return [helperLineHorizontal, helperLineVertical, HelperLines_ApplyNodeChanges] as const;
+  return [helperLineHorizontal, helperLineVertical, applyHelperLinesChanges] as const;
 };
 
 export default useHelperLines;

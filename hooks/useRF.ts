@@ -1,23 +1,22 @@
 import { ReactFlowInstance, useNodes, useReactFlow } from "@xyflow/react";
 
-type getNodeSelected = () => any;
-// eslint-disable-next-line no-unused-vars
-type getNodeDataField = (id: string, field: string) => any; 
+type GetNodeSelected = () => ReturnType<typeof useNodes>[number] | undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type GetNodeDataField = (id: string, field: string) => any; // Уточните тип возвращаемого значения, если он известен
 
 interface CustomReactFlowInstance extends ReactFlowInstance {
-  getNodeSelected: getNodeSelected; // Укажите точный тип возвращаемого значения, если он известен
-  getNodeDataField: getNodeDataField
+  getNodeSelected: GetNodeSelected;
+  getNodeDataField: GetNodeDataField;
 }
 
 const useRF = (): CustomReactFlowInstance => {
   const reactFlow = useReactFlow();
   const nodes = useNodes();
 
-  const getNodeSelected: getNodeSelected = () => nodes.find((node) => node.selected);
-  const getNodeDataField: getNodeDataField = (id, field) => reactFlow.getNode(id)?.data?.[field] ?? null;
+  const getNodeSelected: GetNodeSelected = () => nodes.find((node) => node.selected);
+  const getNodeDataField: GetNodeDataField = (id, field) => reactFlow.getNode(id)?.data?.[field] ?? null;
 
-  return { ...reactFlow, getNodeSelected, getNodeDataField }
+  return { ...reactFlow, getNodeSelected, getNodeDataField };
+};
 
-}
-
-export default useRF
+export default useRF;

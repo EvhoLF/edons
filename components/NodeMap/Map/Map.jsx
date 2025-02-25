@@ -2,7 +2,6 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import { ReactFlow, addEdge, Background, Controls, MiniMap, Panel, useEdgesState, useNodesState, ConnectionMode } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
-import Edge from "../Edge/Edge";
 import { initialEdges, initialNodes } from "@/data/_temp/nodes";
 import styles from './Map.module.scss'
 import { getLayout } from "@/utils/getLayout";
@@ -14,6 +13,7 @@ import { UserPanel } from "@/components/Auth/UserPanel/UserPanel";
 import { Icon } from "@/components/UI/Icon/Icon";
 import PanelTools from "../PanelTools/PanelTools";
 import { nodeTypes } from "../Nodes";
+import { edgeTypes } from "../Edge";
 import { useDnD } from "@/hooks/DnDProvider";
 import { GetNewNode } from "@/utils/Nodes/NodeManagement";
 import PanelNodeManager from "../PanelControlNode/PanelNodeManager";
@@ -24,8 +24,6 @@ import HelperLines from "../HelperLines/HelperLines";
 import useRF_CutCopyPaste from "@/hooks/useRF_CutCopyPaste";
 import useRF_UndoRedo from "@/hooks/useRF_UndoRedo";
 
-const edgeTypes = { node: Edge, };
-
 export const NodesContext = createContext('');
 
 const Map = () => {
@@ -34,8 +32,9 @@ const Map = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [isInteractivity, setIsInteractivity] = useState(true);
+  // const [directionMap, setDirectionMap] = useState(false);
   // const [selectNode, setSelectNode] = useState(nodes[0]?.id || null);
-  const [orientation, setOrientation] = useState('LR');
+  const [orientation, setOrientation] = useState('TB');
   useRF_CutCopyPaste();
 
   // const dispatchSelectNode = (e, { id }) => {
@@ -73,7 +72,7 @@ const Map = () => {
 
   const NodeAddFromGit = async () => {
     // bxgeokurs inputNumberMask trenim useScrollToAnchor
-    const repoTreeContent = await fetchGitHub.RepoTreeContent(session.user.username, 'trenim');
+    const repoTreeContent = await fetchGitHub.RepoTreeContent(session.user.username, 'bxgeokurs');
     console.log(repoTreeContent);
     const { newNodes, newEdges } = await ParseGitInNode(repoTreeContent);
 
@@ -111,9 +110,12 @@ const Map = () => {
     [setNodes, helperLinesNodeChange]
   );
 
+  // console.log(nodes.map(e => ({ ...e, data: { ...e.data, codeData: '' } })));
+
+
   return (
     <div className={styles.Map}>
-      <NodesContext.Provider value={{ setNodes, isInteractivity }}>
+      <NodesContext.Provider value={{ setNodes, isInteractivity, orientation }}>
         <ReactFlow
           onDrop={onDrop}
           onDragOver={onDragOver}
@@ -128,7 +130,7 @@ const Map = () => {
           connectionLineStyle={{ stroke: '#999' }}
           onConnect={onConnect}
           proOptions={{ hideAttribution: true }}
-          itemProp={'zxc'}
+          // itemProp={'zxc'}
           fitView
           minZoom={0.1}
           // onMoveStart={}
@@ -184,12 +186,12 @@ const Map = () => {
             position="bottom-right"
             showFitView={false} showZoom={false} showInteractive={false}
           >
-            <Button className={styles.glass} onClick={() => { zoomIn() }}> <Icon icon='plus' /> </Button>
-            <Button className={styles.glass} onClick={() => { zoomOut() }}> <Icon icon='minus' /> </Button>
-            <Button className={styles.glass} onClick={() => { fitView() }}> <Icon icon='focus' /> </Button>
-            <Button className={styles.glass} onClick={() => onLayout("TB")}> <Icon icon='nodeVertical' /> </Button>
-            <Button className={styles.glass} onClick={() => onLayout("LR")}> <Icon icon='nodeHorizontal' /> </Button>
-            <Button className={styles.glass} onClick={() => { setIsInteractivity(e => !e) }}> <Icon icon={isInteractivity ? 'lockUnlock' : 'lock'} /> </Button>
+            <Button onClick={() => { zoomIn() }} iconLeft="plus" variant='colorGlass' dimension="xs" square />
+            <Button onClick={() => { zoomOut() }} iconLeft="minus" variant='colorGlass' dimension="xs" square />
+            <Button onClick={() => { fitView() }} iconLeft="focus" variant='colorGlass' dimension="xs" square />
+            <Button onClick={() => onLayout("TB")} iconLeft="linesVertical" variant='colorGlass' dimension="xs" square />
+            <Button onClick={() => onLayout("LR")} iconLeft="linesHorizontal" variant='colorGlass' dimension="xs" square />
+            <Button onClick={() => { setIsInteractivity(e => !e) }} iconLeft={isInteractivity ? 'lockUnlock' : 'lock'} variant='colorGlass' dimension="xs" square />
           </Controls>
           <Background color="#556" size={1} gap={30} />
         </ReactFlow>

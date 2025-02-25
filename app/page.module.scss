@@ -1,0 +1,200 @@
+.GlassPanel {
+  @include GlassPanel;
+}
+
+
+.header {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: fit-content;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  z-index: $z-index-header;
+
+  &_body {
+    position: fixed;
+    display: flex;
+    gap: 30px;
+    // margin: auto;
+    width: fit-content;
+
+    padding: $spacing-sm $spacing-md;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.logo {
+  @include GradientText;
+  @include GradientSvg;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  &_img {
+    width: 24px;
+    height: 24px;
+  }
+
+  &_text {
+    font-size: $font-size-xl;
+    font-weight: 600;
+  }
+}
+
+.container {
+  width: 90%;
+  margin: auto;
+}
+.sections{
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-h2;
+}
+.section{
+}
+.sectionFull {
+  min-height: 100vh;
+}
+
+.center {
+  // display: grid;
+  // grid-template-columns: 1fr;
+  // grid-template-rows: 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dividerA {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.dividerB {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+
+  &.reserved {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+.tempVoid {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #fff;
+}
+
+
+.blockInf {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+
+.headingA {
+  font-size: 60px;
+  line-height: 1;
+}
+
+.headingA_sub {
+  font-size: 24px;
+}
+
+.headingB {
+  font-size: 35px;
+  font-weight: normal;
+}
+
+.headingB_sub {
+  font-size: 1rem;
+}
+
+.textGradient {
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: $spacing-lg;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "a a b"
+    "a a c"
+    "d f f"
+    "e f f";
+}
+
+.grid_item {
+  width: 100%;
+  padding: $spacing-lg;
+}
+
+.grid_item:nth-child(1) {
+  grid-area: a;
+}
+
+.grid_item:nth-child(2) {
+  grid-area: b;
+}
+
+.grid_item:nth-child(3) {
+  grid-area: c;
+}
+
+.grid_item:nth-child(4) {
+  grid-area: d;
+}
+
+.grid_item:nth-child(5) {
+  grid-area: e;
+}
+
+.grid_item:nth-child(6) {
+  grid-area: f;
+}
+
+
+.map {
+  width: 100vw;
+  height: 100vh;
+}
+
+
+.tres {
+  position: relative;
+  // background: #fff;
+
+}
+
+.tres_bd {
+  position: absolute;
+  inset: 1px;
+  background-size: 15px 15px;
+  background-image: radial-gradient($color-primary 2px, transparent 2px);
+  z-index: 1;
+
+  -webkit-mask-image: radial-gradient(120% 100% at 107.1% -9.2%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  mask-image: radial-gradient(120% 100% at 107.1% -9.2%, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+// -webkit-mask-image: radial-gradient(120% 100% at 107.1% -9.2%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%) add;
+// mask-image: radial-gradient(120% 100% at 107.1% -9.2%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%) add;

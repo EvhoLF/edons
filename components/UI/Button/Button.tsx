@@ -1,19 +1,10 @@
-import React, { FC, ReactNode } from 'react';
-import styles from './Button.module.scss';
+import { FC } from 'react';
+import { Button, ButtonProps } from '@mui/material';
 
-interface ButtonProps {
-  onClick?: (...args: unknown[]) => void;
-  onBlur?: (...args: unknown[]) => void;
-  className?: string;
-  children?: ReactNode;
-}
-
-const Button: FC<ButtonProps> = ({ onClick = () => { }, onBlur = () => { }, className = '', children = '' }) => {
+const uiButton: FC<ButtonProps> = ({ children }) => {
   return (
-    <button className={`${styles.Button} ${className}`} onClick={onClick} onBlur={onBlur}>
-      {children}
-    </button>
+    <Button>{children}</Button>
   );
 };
 
-export default Button;
+export default uiButton;

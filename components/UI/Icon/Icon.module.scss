@@ -1,7 +1,25 @@
-.Icon{
-  // width: 16px;
-  // height: 16px;
-  min-width: 16px;
-  min-height: 16px;
+.Icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
   aspect-ratio: 1/1;
+  fill: currentColor;
+}
+
+.IconGradient {
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 0;
+  top: 0;
+
+  stop:first-child {
+    stop-color: $color-primary !important;
+  }
+
+  stop:last-child {
+    stop-color: $color-secondary !important;
+  }
 }
