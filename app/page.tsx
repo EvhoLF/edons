@@ -1,12 +1,9 @@
 import clsx from "clsx";
 import styles from "./page.module.scss";
 import Head from "next/head";
-import { Icon } from "@/components/UI/Icon/Icon";
-import Button from "@/components/UI/Button/Button";
-import ButtonLink from "@/components/UI/Button/ButtonLink";
-import NavLink from "@/components/UI/NavLink/NavLink";
 import BG from "@/components/UI/BG/BG";
-import StatCounters from "@/components/StatCounters/StatCounters";
+import { Button, Stack, Typography } from "@mui/material";
+import Header from "@/components/Header/Header";
 
 export default function Home() {
   return (
@@ -14,36 +11,19 @@ export default function Home() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
+      <Header />
       <div className={styles.container}>
-        <header className={styles.header}>
-          <div className={clsx(styles.header_body, styles.GlassPanel)}>
-            <div className={styles.logo}><Icon icon="edons" className={styles.logo_img} /><span className={styles.logo_text}>EDONs</span></div>
-            <nav>
-              <NavLink variant="white" href='#'>Docs</NavLink>
-              <NavLink variant="white" href='/workspace'>Worksapce</NavLink>
-              <NavLink variant="white" href='#'>Contact</NavLink>
-            </nav>
-            <ButtonLink href='/profile' dimension='s' iconLeft='user'>Profile</ButtonLink>
-            {/* <button className={styles.proBtn}>React Flow Pro</button> */}
-          </div>
-        </header>
-
         <main className={styles.main}>
           <div className={clsx(styles.container)}>
             <section className={clsx(styles.section, styles.sectionFull, styles.center)}>
-              {/* <ReactFlowProvider>
-                <DnDProvider>
-                  <SimpleMap />
-                </DnDProvider>
-              </ReactFlowProvider> */}
               <div className={styles.dividerA}>
                 <div className={styles.blockInf}>
-                  <h1 className={styles.headingA}>Wire Your Ideas with <span className={styles.textGradient}>React Flow</span></h1>
-                  <p className={styles.headingA_sub}>A customizable React component for building node-based editors and interactive diagrams</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                    <Button dimension="m" variant='filled'>Quickstart</Button>
-                    <Button dimension="m" variant='colorGlass'>React pro</Button>
-                  </div>
+                  <Typography variant='h3'>EDONs — Визуализация, анализ, оптимизация кода</Typography>
+                  <Typography variant='body1'>Разбирайтесь в коде быстрее. Автоматический анализ, визуализация зависимостей, рекомендации по улучшению и совместная работа — всё в одном месте</Typography>
+                  <Stack direction='row' spacing={2}>
+                    <Button size='large' variant='contained'>Начать работать</Button>
+                    <Button size='large' variant='outlined'>Узнать подробнее</Button>
+                  </Stack>
                 </div>
 
                 <div className={styles.tres}>
@@ -59,7 +39,6 @@ export default function Home() {
 
             <div className={styles.sections}>
               <section>
-                <StatCounters />
               </section>
 
               <section className={clsx(styles.section, styles.sectionFull)}>
@@ -74,7 +53,7 @@ export default function Home() {
                     <h1 className={styles.headingB}>Совместная работа</h1>
                   </div>
                   <div className={clsx(styles.grid_item, styles.GlassPanel)}>
-                    <h1 className={styles.headingB}>Анализ кода с ИИ-помощником</h1>
+                    <h1 className={styles.headingB}>Интеграция с GitHub</h1>
                   </div>
                   <div className={clsx(styles.grid_item, styles.GlassPanel)}>
                     <h1 className={styles.headingB}>Совместная работа</h1>

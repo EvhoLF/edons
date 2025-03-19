@@ -1,19 +1,32 @@
-"use client"
-import Button, { ButtonProps } from '@/components/UI/Button/Button'
-import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
-import React, { FC } from 'react'
+"use client";
+import { Button, ButtonProps } from "@mui/material";
+// import InputButton, { InputButtonProps } from "@/components/UI/InputButton/InputButton";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import React, { FC } from "react";
 
-interface AuthButton extends ButtonProps {
-  provider: 'github' | 'google'
+interface AuthButtonProps extends ButtonProps {
+  provider: "github" | "google";
+  callbackUrl?: string;
 }
 
-const AuthButton: FC<AuthButton> = ({ provider, children, ...props }) => {
+const AuthButton: FC<AuthButtonProps> = ({ provider, children, callbackUrl = '/profile', ...props }) => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/profile';
-  return (
-    <Button iconLeft={provider} fillX onClick={() => signIn(provider, { callbackUrl })} {...props}>{children}</Button>
-  )
-}
+  const defaultCbUrl = searchParams.get("callbackUrl") || "/profile";
+  const cbUrl = callbackUrl ?? defaultCbUrl;
 
-export default AuthButton
+  return (
+    <Button
+      onClick={() => signIn(provider, { callbackUrl: cbUrl })}
+      size="large"
+      variant="outlined"
+      startIcon={provider}
+      fullWidth
+      {...props}
+    >
+      {children}
+    </Button>
+  );
+};
+
+export default AuthButton;

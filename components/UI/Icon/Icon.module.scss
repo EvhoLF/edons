@@ -1,12 +1,12 @@
-.Icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1em;
-  height: 1em;
-  aspect-ratio: 1/1;
-  fill: currentColor;
-}
+// .Icon {
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   width: 1em;
+//   height: 1em;
+//   aspect-ratio: 1/1;
+//   fill: currentColor;
+// }
 
 .IconGradient {
   position: absolute;
@@ -16,10 +16,10 @@
   top: 0;
 
   stop:first-child {
-    stop-color: $color-primary !important;
+    stop-color: #df1b7d !important; //$color-primary !important;
   }
 
   stop:last-child {
-    stop-color: $color-secondary !important;
+    stop-color: #dd2748 !important; //$color-secondary !important;
   }
 }

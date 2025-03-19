@@ -1,48 +1,33 @@
-import { InputHTMLAttributes, FC, ReactNode } from 'react';
-import clsx from 'clsx';
-import styles from './InputText.module.scss';
+import { FC, ReactNode } from 'react';
+import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
 import { IconName } from '@/data/data_icons';
 import { Icon } from '../Icon/Icon';
 
-interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
-  variant?: 'filled' | 'outlined' | 'text';
-  dimension?: 'x' | 's' | 'm' | 'l';
-  round?: 'none' | 'sm' | 'md' | 'lg' | 'round';
-  iconLeft?: IconName;
-  iconRight?: IconName;
-  children?: ReactNode;
-  contentLeft?: ReactNode;
-  contentRight?: ReactNode;
-  label?: string;
+type InputTextProps = TextFieldProps & {
+  startAdornment?: ReactNode,
+  endAdornment?: ReactNode,
+  startIcon?: IconName,
+  endIcon?: IconName,
+  labelActive?: boolean,
 }
 
-const InputText: FC<InputTextProps> = ({
-  variant = 'filled',
-  dimension = 's',
-  round = 'md',
-  iconLeft,
-  iconRight,
-  className,
-  contentLeft,
-  contentRight,
-  label,
-  ...props
-}) => {
+const InputText: FC<InputTextProps> = ({ labelActive = false, startAdornment, endAdornment, startIcon, endIcon, ...props }) => {
+
+  const InputLabelProps = labelActive ? { shrink: true } : {}
+
+  const getAdornment = (position: 'start' | 'end', icon?: IconName, adornment?: ReactNode,) =>
+    icon ? <InputAdornment position={position}><Icon icon={icon} /></InputAdornment>
+      : adornment && <InputAdornment position={position}>{adornment}</InputAdornment>;
+
+  const slotProps = {
+    input: {
+      startAdornment: getAdornment('start', startIcon, startAdornment,),
+      endAdornment: getAdornment('end', endIcon, endAdornment),
+    },
+  };
+
   return (
-    <div className={clsx(
-      styles.InputText,
-      styles[variant],
-      styles[dimension],
-      styles[`r-${round}`],
-      className
-    )}>
-      <label className={styles.label}>{label}</label>
-      <div className={styles.container}>
-        {contentLeft} {iconLeft && <Icon icon={iconLeft} className={styles.iconLeft} />}
-        <input className={styles.input} {...props} />
-        {contentRight} {iconRight && <Icon icon={iconRight} className={styles.iconRight} />}
-      </div>
-    </div>
+    <TextField InputLabelProps={InputLabelProps} slotProps={slotProps} {...props} />
   );
 };
 

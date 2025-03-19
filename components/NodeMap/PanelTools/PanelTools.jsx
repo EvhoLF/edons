@@ -8,7 +8,7 @@ import { tNodeShape } from '@/data/NodeTemplates/tNodeShape';
 import Menus, { MenusButton, MenusMenu } from '@/components/UI/Menus/Menus';
 import Frame from '@/components/UI/Frame/Frame';
 import { Icon } from '@/components/UI/Icon/Icon';
-import Button from '@/components/UI/Button/Button';
+import Button from '@/components/UI/InputButton/InputButton';
 
 const NODE_DEF = tNodeCode.text;
 const templates = {

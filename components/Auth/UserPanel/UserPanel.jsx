@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './UserPanel.module.scss'
-import Button from '@/components/UI/Button/Button';
+import Button from '@/components/UI/InputButton/InputButton';
 import useGithub from '@/hooks/useGithub';
 import Frame from '@/components/UI/Frame/Frame';
 

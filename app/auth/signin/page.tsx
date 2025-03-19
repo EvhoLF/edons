@@ -1,17 +1,15 @@
-import styles from "./page.module.scss";
-import Head from "next/head";
 import BG from "@/components/UI/BG/BG";
-import SigninForm from "@/components/Auth/SigninForm/SigninForm";
+import { Container } from "@mui/material";
+import SigninForm from "@/components/Auth/Forms/SigninForm";
+import Header from "@/components/Header/Header";
 
 export default function Page() {
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-      </Head>
-      <div className={styles.container}>
+      <Header />
+      <Container sx={{ display: 'flex', height: '100vh', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <SigninForm />
-      </div>
+      </Container>
       <BG />
     </>
   );

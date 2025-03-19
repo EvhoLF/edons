@@ -7,7 +7,7 @@ import styles from './Map.module.scss'
 import { getLayout } from "@/utils/getLayout";
 import { ParseFileInNode } from "@/utils/Nodes/ParseFileInNode";
 import useGithub from "@/hooks/useGithub";
-import Button from "@/components/UI/Button/Button";
+import Button from "@/components/UI/InputButton/InputButton";
 import { ParseGitInNode } from "@/utils/Nodes/ParseGitInNode";
 import { UserPanel } from "@/components/Auth/UserPanel/UserPanel";
 import { Icon } from "@/components/UI/Icon/Icon";

@@ -3,7 +3,7 @@ import { ChangeEvent, memo } from 'react';
 import { Handle, Position, NodeToolbar } from '@xyflow/react';
 import styles from './NodeTable.module.scss'
 import { preventSelfLink } from '@/utils/Nodes/preventSelfLink';
-import Button from '@/components/UI/Button/Button';
+import Button from '@/components/UI/InputButton/InputButton';
 import { Icon } from '@/components/UI/Icon/Icon';
 import useRF from '@/hooks/useRF';
 import useNodeTransfer from '@/hooks/useNodeTransfer';

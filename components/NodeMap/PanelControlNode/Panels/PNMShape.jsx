@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../PanelNodeManager.module.scss';
 import InputDrop from '@/components/UI/InputDrop/InputDrop';
-import Button from '@/components/UI/Button/Button';
+import Button from '@/components/UI/InputButton/InputButton';
 import { Icon } from '@/components/UI/Icon/Icon';
 import Input from '@/components/UI/Input/Input';
 import InputColor from '@/components/UI/InputColor/InputColor';

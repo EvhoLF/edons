@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
   },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
-    prependData: `@import "variables.scss"; @import "mixins.scss";`,
+    additionalData: `@use "variables" as *; @use "mixins" as *;`,
   },
 };
 

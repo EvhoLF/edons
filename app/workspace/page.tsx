@@ -1,11 +1,9 @@
-import clsx from "clsx";
 import styles from "./page.module.scss";
 import Head from "next/head";
-import Container from "@/components/UI/Container/Container";
-import Frame from "@/components/UI/Frame/Frame";
-import Button from "@/components/UI/Button/Button";
-import { Icon } from "@/components/UI/Icon/Icon";
 import InputText from "@/components/UI/InputText/InputText";
+import { Button, Container, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Icon } from "@/components/UI/Icon/Icon";
+import CardMap from "@/components/Workspace/CardMap/CardMap";
 
 const dataEls = [
   {
@@ -13,8 +11,8 @@ const dataEls = [
     label: 'ReactMap',
     dateCreate: '28.08.2002',
     dateUpdate: '12.02.2003',
-    favourite: true,
-    publicAccess: false,
+    isFavourite: true,
+    isPublicAccess: false,
     img: null,
   },
   {
@@ -22,8 +20,8 @@ const dataEls = [
     label: 'ABOA ZXC ABOA ZXC ABOA ZXC ABOA ZXC ABOA ZXC ABOA ZXC',
     dateCreate: '05.10.1999',
     dateUpdate: '28.08.2012',
-    favourite: false,
-    publicAccess: true,
+    isFavourite: false,
+    isPublicAccess: true,
     img: null,
   },
 ];
@@ -34,38 +32,26 @@ export default function Page() {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Head>
-      <Container>
+      <Container maxWidth='xl'>
         <div className={styles.Worksapce}>
           <div className={styles.Worksapce_panel}>
-            <InputText placeholder="Placeholder text" iconLeft='search' />
+            <InputText placeholder="Placeholder text" startIcon='search' />
             <div>
-              <Button dimension='md' iconLeft="stars" square />
+              <Button startIcon={<Icon icon='stars' />} />
             </div>
           </div>
-          <div className={styles.Worksapce_grid}>
-            {dataEls.map(el => (
-              <Frame key={el.id} className={styles.cardMap}>
-                <div className={styles.cardMap_}>
-                </div>
-                <div className={styles.cardMap_content}>
-                  <h4 className={styles.cardMap_label} >{el.label}</h4>
-                </div>
-                <div className={styles.options}>
-                  <div className={clsx(styles.options_item, el.favourite && styles.active)}>
-                    <Button className={styles.btnStar} variant='text' dimension='sm' square iconLeft="stars" />
-                  </div>
-                  <div className={clsx(styles.options_item, el.publicAccess && styles.active)}>
-                    <Button className={styles.btnLink} variant='text' dimension='sm' square iconLeft="link" />
-                  </div>
-                  <div className={clsx(styles.options_item)}>
-                    <Button className={styles.btnOption} variant='text' dimension='sm' square iconLeft="option" />
-                  </div>
-                </div>
-              </Frame>
-            ))}
-          </div>
+          <Stack direction='row' spacing={2} flexWrap='wrap' alignItems='center'>
+            {dataEls.map(el => <CardMap key={el.id} {...el} />)}
+            <Stack width='115px' alignItems='center' justifyContent='center'>
+              <Tooltip title="Новая карта">
+                <IconButton color='primary' size='large' sx={{ background: '#1e101c50', width: 'fit-content', height: 'fit-content' }}>
+                  <Icon icon='plus' color='ui' />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          </Stack>
         </div>
-      </Container>
+      </Container >
     </>
   );
 }

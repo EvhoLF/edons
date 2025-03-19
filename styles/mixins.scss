@@ -1,3 +1,6 @@
+@use "variables" as *;
+@use "sass:map";
+
 @mixin GlassPanel {
   border-radius: $border-radius-md;
   border: $border-width solid $color-glass-border;
@@ -20,17 +23,17 @@
 }
 
 @mixin FontSize($size) {
-  $font-size-var: map-get($font-size, $size);
-  $line-height-var: map-get($line-height, $size);
+  $font-size-var: map.get($font-size, $size);
+  $line-height-var: map.get($line-height, $size);
   font-size: $font-size-var;
   line-height: 1.75rem;
 }
 
 @mixin ButtonSize($size) {
-  $icon-size-var: map-get($icon-size, $size);
-  $font-size-var: map-get($font-size, $size);
-  $line-height-var: map-get($line-height, $size);
-  $padding-x-var: map-get($padding-x, $size);
+  $icon-size-var: map.get($icon-size, $size);
+  $font-size-var: map.get($font-size, $size);
+  $line-height-var: map.get($line-height, $size);
+  $padding-x-var: map.get($padding-x, $size);
 
   font-size: $font-size-var;
   line-height: 1.75rem;
@@ -49,10 +52,10 @@
 }
 
 @mixin InputSize($size) {
-  $icon-size-var: map-get($icon-size, $size);
-  $font-size-var: map-get($font-size, $size);
-  $line-height-var: map-get($line-height, $size);
-  $padding-x-var: map-get($padding-x, $size);
+  $icon-size-var: map.get($icon-size, $size);
+  $font-size-var: map.get($font-size, $size);
+  $line-height-var: map.get($line-height, $size);
+  $padding-x-var: map.get($padding-x, $size);
 
   & .label {
     font-size: $font-size-var;

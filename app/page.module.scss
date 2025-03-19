@@ -2,35 +2,6 @@
   @include GlassPanel;
 }
 
-
-.header {
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: fit-content;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  z-index: $z-index-header;
-
-  &_body {
-    position: fixed;
-    display: flex;
-    gap: 30px;
-    // margin: auto;
-    width: fit-content;
-
-    padding: $spacing-sm $spacing-md;
-  }
-
-  nav {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-}
-
 .logo {
   @include GradientText;
   @include GradientSvg;
@@ -45,7 +16,7 @@
   }
 
   &_text {
-    font-size: $font-size-xl;
+    font-size: $font-size-l;
     font-weight: 600;
   }
 }
