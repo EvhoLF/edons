@@ -1,6 +1,6 @@
 'use client'
 import styles from './Input.module.scss'
-import Tooltip from '../Tooltip/Tooltip';
+// import Tooltip from '../Tooltip/Tooltip';
 
 const Input = ({
   type = "text",
@@ -18,7 +18,7 @@ const Input = ({
     <div className={styles.Input} onClick={onClick}>
       <span className={styles.Input_info}>
         {Icon}
-        <Tooltip text={tooltip} />
+        {/* <Tooltip text={tooltip} /> */}
       </span>
       <input
         className={`${styles.Input_input} ${styles.hide}`}

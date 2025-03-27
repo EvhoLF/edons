@@ -40,7 +40,7 @@ const NodeCode = ({ id, data }) => {
     <div className={styles.Node} style={{ borderColor: color }}>
       {isHorizontal && handles_items}
       <div className={styles.titleBlock}>
-        <Icon className={styles.titleBlock_icon} icon={icon} color={color} />
+        <Icon className={styles.titleBlock_icon} icon={icon} sx={{ color: color }} />
         <div className={styles.titleBlock_title}>{label}</div>
       </div>
       <div className={styles.controls}>

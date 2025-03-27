@@ -1,11 +1,11 @@
 export const palette = {
-  primary: { main: '#de2163', light: '#e44d82', dark: '#9b1745', },
+  primary: { main: '#de2163', light: '#f52875', dark: '#9b1745', },
   primary_alt: { main: '#df1b7d', light: '#e54897', dark: '#9c1257', },
   secondary: { main: '#dd2748', light: '#e3526c', dark: '#9a1b32', },
   ui: { main: '#f9f9f9', light: '#ffffff', dark: '#bbbbbb', },
   glass: {
     border: '#ffc8ed17',
-    bg: '#1e101c50',
+    bg: '#1e101c70',
   },
   dark: '#120911',
   gradientPrimary: `linear-gradient(150deg, #df1b7d, #dd2748)`,

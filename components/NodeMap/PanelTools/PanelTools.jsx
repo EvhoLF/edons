@@ -1,100 +1,76 @@
-import React, { useContext } from 'react'
-import styles from './PanelTools.module.scss';
+import React, { useContext, useCallback, useMemo, useState } from 'react';
 import { NodesContext } from '../Map/Map';
 import { generateUnique } from '@/utils/generateUnique';
 import DnD from '@/components/DnD/DnD';
 import { tNodeCode } from '@/data/NodeTemplates/tNodeCode';
 import { tNodeShape } from '@/data/NodeTemplates/tNodeShape';
-import Menus, { MenusButton, MenusMenu } from '@/components/UI/Menus/Menus';
-import Frame from '@/components/UI/Frame/Frame';
+import { IconButton, MenuItem, Box, Stack, Popover, Tooltip } from '@mui/material';
 import { Icon } from '@/components/UI/Icon/Icon';
-import Button from '@/components/UI/InputButton/InputButton';
+import Frame from '@/components/UI/Frame/Frame';
+import PopoverMenu from '@/components/UI/MUI/PopoverMenu';
 
-const NODE_DEF = tNodeCode.text;
-const templates = {
-  node: () => ({
-    id: generateUnique(),
-    imports: [],
-    fileName: '',
-    path: '',
-    position: { x: 1, y: 1 },
-    type: "node",
-    data: {
-      node: {
-        title: '',
-        color: NODE_DEF.color,
-        icon: NODE_DEF.icon,
-        textHeader: '',
-        text: '',
-        image: '',
-        code: { type: NODE_DEF.type, data: '' },
-        visibleField: { textHeader: false, text: false, image: false, code: false, ...NODE_DEF.visibleField },
-        property: { fileName: null, fileSize: null, },
-      },
-    },
-  }),
-}
 
 const PanelAddNode = () => {
-  const { setNodes } = useContext(NodesContext);
 
-  const addNodes = (type, options) => () => {
-    setNodes(prev => [...prev, templates[type](options)])
-  }
+  const menuItems = useMemo(() => Object.values(tNodeShape).map(e => (
+    <DnD key={e.id} data={{ type: 'ADD_NODE', data: { nodeType: 'shape', subType: e.id } }}>
+      <IconButton color='primary'>
+        <Icon icon={e.data.icon} color='ui' />
+      </IconButton>
+    </DnD>
+  )), []);
 
   return (
-    <div className={styles.PanelTools}>
-      <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
-        <div className={styles.tools_button}>
-          <Icon icon='code' />
-        </div>
-      </DnD>
+    <Frame sx={{ width: 'fit-content' }} p={.5}>
+      <Stack spacing={1}>
+        <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
+          <Tooltip title='Блок узел'>
+            <IconButton color='primary'>
+              <Icon icon='code' color='ui' />
+            </IconButton>
+          </Tooltip>
+        </DnD>
 
-      <div>
-        <Menus>
-          <MenusButton>
-            <div className={styles.tools_button}>
-              <Icon icon='shape_rectangle' />
-            </div>
-          </MenusButton>
-          <MenusMenu>
-            <Frame className={styles.PanelTools}>
-              {
-                Object.values(tNodeShape).map(e => (
-                  <div key={e.id} className={styles.tools_button}>
-                    <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'shape', subType: e.id } }}>
-                      <div className={styles.tools_button}>
-                        <Icon icon={e.data.icon} />
-                      </div>
-                    </DnD>
-                  </div>
-                ))
-              }
-            </Frame>
-          </MenusMenu>
-        </Menus>
-      </div>
+        <PopoverMenu
+          openButton={({ handleOpen }) => (
+            <Box>
+              <Tooltip title='Блоки фигуры'>
+                <IconButton onClick={handleOpen} color='primary'>
+                  <Icon icon='shape_rectangle' color='ui' />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+          sx={{ marginLeft: 2 }}
+          stack={{ spacing: 1 }}
+        >
+          {menuItems}
+        </PopoverMenu>
 
-      <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'table' } }}>
-        <div className={styles.tools_button}>
-          <Icon icon='sql' />
-        </div>
-      </DnD>
+        <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'table' } }}>
+          <Tooltip title='Блок базы данных'>
+            <IconButton color='primary'>
+              <Icon icon='sql' color='ui' />
+            </IconButton>
+          </Tooltip>
+        </DnD>
+        <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
+          <Tooltip title='Блок диаграмма'>
+            <IconButton color='primary'>
+              <Icon icon='chartPie' color='ui' />
+            </IconButton>
+          </Tooltip>
+        </DnD>
+        <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
+          <Tooltip title='Блок диаграмма'>
+            <IconButton color='primary'>
+              <Icon icon='chartLine' color='ui' />
+            </IconButton>
+          </Tooltip>
+        </DnD>
+      </Stack>
+    </Frame >
+  );
+};
 
-      <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
-        <div className={styles.tools_button}>
-          <Icon icon='chartPie' />
-        </div>
-      </DnD>
-
-      <DnD data={{ type: 'ADD_NODE', data: { nodeType: 'code' } }}>
-        <div className={styles.tools_button}>
-          <Icon icon='chartLine' />
-        </div>
-      </DnD>
-
-    </div>
-  )
-}
-
-export default PanelAddNode
+export default React.memo(PanelAddNode);

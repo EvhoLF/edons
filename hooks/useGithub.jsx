@@ -1,20 +1,15 @@
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react'
 
 const useGithub = () => {
   const { data: session } = useSession();
   const [repos, setRepos] = useState([]);
 
-  const auth = {
-    signOut: () => signOut(),
-    signIn: () => signIn('github'),
-  }
-
   async function fetchGitHub(endpoint, headers = {}, params = {}) {
     const url_params = new URLSearchParams(params);
     try {
       const response = await fetch(`https://api.github.com/${endpoint}?${url_params}`, {
-        headers: { Authorization: `token ${session.user.access_token}`, ...headers },
+        headers: { Authorization: `token ${session.github_access_token}`, ...headers },
       });
       return await response.json();
     }
@@ -24,25 +19,23 @@ const useGithub = () => {
     }
   }
 
-  async function RepoTree(repoOwner, repoName, branch = 'main') {
-    const branchData = await fetchGitHub(`repos/${repoOwner}/${repoName}/branches/${branch}`);
+  async function RepoTree(repoOwner, branch = 'main') {
+    const branchData = await fetchGitHub(`repos/${repoOwner}/branches/${branch}`);
     const commitSHA = branchData.commit.sha;
-    const treeData = await fetchGitHub(`repos/${repoOwner}/${repoName}/git/trees/${commitSHA}?recursive=1`);
+    const treeData = await fetchGitHub(`repos/${repoOwner}/git/trees/${commitSHA}?recursive=1`);
     return treeData.tree;
   }
 
-  async function FileContent(repoOwner, repoName, filePath, branch = 'main') {
-    const fileData = await fetchGitHub(`repos/${repoOwner}/${repoName}/contents/${filePath}`, {}, { ref: branch });
+  async function FileContent(repoOwner, filePath, branch = 'main') {
+    const fileData = await fetchGitHub(`repos/${repoOwner}/contents/${filePath}`, {}, { ref: branch });
     return new TextDecoder("utf-8").decode(Uint8Array.from(atob(fileData.content), c => c.charCodeAt(0)));
   }
 
-  async function RepoTreeContent(repoOwner, repoName, branch = 'main') {
-    const data = await RepoTree(repoOwner, repoName, branch);
-    console.log(data);
-
+  async function RepoTreeContent(repoOwner, branch = 'main') {
+    const data = await RepoTree(repoOwner, branch);
     const filePromises = data.map(async (file) => {
       if (file.type !== 'blob') return { ...file, data: null };
-      const fileData = await FileContent(repoOwner, repoName, file.path, branch);
+      const fileData = await FileContent(repoOwner, file.path, branch);
       return { ...file, data: fileData, fileName: file.path.split('/').pop() };
     });
     return await Promise.all(filePromises);
@@ -60,7 +53,7 @@ const useGithub = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
-  return { session, auth, repos, fetchGitHub: { fetch: fetchGitHub, RepoTree, FileContent, RepoTreeContent } }
+  return { repos, GitFetchs: { fetchGitHub, RepoTree, FileContent, RepoTreeContent } }
 }
 
 export default useGithub

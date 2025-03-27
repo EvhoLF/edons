@@ -95,7 +95,7 @@ export const getLayout = (nodes, edges, direction) => {
   });
   // console.log(layoutNodes);
 
-  console.log({ nodes: [...layoutNodes, ...nonConnectedLayoutNodes], edges });
+  // console.log({ nodes: [...layoutNodes, ...nonConnectedLayoutNodes], edges });
 
   return { nodes: [...layoutNodes, ...nonConnectedLayoutNodes], edges };
 };

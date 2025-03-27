@@ -33,7 +33,7 @@ export const gradientBorder = {
 export const glassBackground = {
   borderRadius: '8px',
   border: `1px solid ${palette.glass.border}`,
-  background: '#fff',
+  background: `${palette.glass.bg}`,
   WebkitBackdropFilter: 'saturate(180%) blur(4px)',
   backdropFilter: 'saturate(180%) blur(4px)',
 }

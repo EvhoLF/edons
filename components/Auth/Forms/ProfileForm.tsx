@@ -1,10 +1,12 @@
 'use client'
-import InputButton from "@/components/UI/InputButton/InputButton";
-import InputText from "@/components/UI/InputText/InputText";
+import Frame from "@/components/UI/Frame/Frame";
+import { Icon } from "@/components/UI/Icon/Icon";
+import InputButton from "@/components/UI/MUI/InputButton";
+import InputText from "@/components/UI/MUI/InputText";
 import { UserAction } from "@/DB/actions/UserAction";
 import { IErrorResponse, IUser } from "@/DB/models/User";
 import { encryptDataURI } from "@/utils/uid_crypto";
-import { Avatar, Container, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Container, Stack, Typography } from "@mui/material";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { ValidationError } from "next/dist/compiled/amphtml-validator";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
@@ -117,6 +119,7 @@ const ProfileForm = () => {
   return (
     <Container sx={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>
       <form onSubmit={handleSubmit}>
+        {/* <Frame paddingY={2} paddingX={4}> */}
         <Stack spacing={4}>
           <Typography variant="h4" gutterBottom textAlign='center'>
             Профиль
@@ -124,7 +127,12 @@ const ProfileForm = () => {
           <Stack spacing={4} direction='row' alignItems='center' justifyContent='center'>
             <input hidden id="fileInput" type="file" accept=".jpg, .jpeg, .png" onChange={handleFileChange} />
             <label htmlFor="fileInput">
-              <Avatar sx={{ width: 100, height: 100 }} alt="Remy Sharp" src={form.image} />
+              <Box sx={{ position: 'relative' }}>
+                <Avatar sx={{ width: 100, height: 100 }} alt="Remy Sharp" src={form.image} />
+                <Stack sx={{ opacity: '0', transition: '.3s', '&:hover': { opacity: '.75' }, '&:active': { opacity: '1' }, position: 'absolute', inset: '0', background: '#11111190', borderRadius: '999999px' }} alignItems='center' justifyContent='center'>
+                  <Icon icon='pen' />
+                </Stack>
+              </Box>
             </label>
 
             <Stack spacing={4}>
@@ -146,6 +154,7 @@ const ProfileForm = () => {
           <InputButton disabled={isChanged} type='submit' variant='contained' size='large' fullWidth>Сохранить</InputButton>
           <InputButton size='small' variant='text' fullWidth onClick={() => { signOut({ callbackUrl: '/' }) }}>Выйти</InputButton>
         </Stack>
+        {/* </Frame> */}
       </form>
     </Container>
   );

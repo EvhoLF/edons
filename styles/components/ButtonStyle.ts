@@ -2,6 +2,14 @@ import { ComponentsOverrides, ComponentsProps, ComponentsVariants, Theme } from 
 import { gradientBorder, gradientSvg, gradientText } from "../mixins";
 import { palette } from "../variables";
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    contained_alt: true;
+    outlined_alt: true;
+    text_alt: true;
+  }
+}
+
 type ButtonStyleProps = {
   defaultProps?: ComponentsProps['MuiButton'];
   styleOverrides?: ComponentsOverrides<Theme>['MuiButton'];
@@ -13,32 +21,12 @@ const ButtonStyle: ButtonStyleProps = {
     root: {
       position: 'relative',
       gap: '8px',
-      background: 'transparent',
       transition: 'all .3s',
-      "&:hover": {
-        scale: '1.05'
-      },
-      "&:active": {
-        scale: '1'
-      },
-      "&::before": {
-        zIndex: '-1'
-      },
-      ":disabled": {
-        filter: 'grayscale(20%) brightness(50%)'
-      }
+      "&:hover": { scale: '1.05' },
+      "&:active": { scale: '1' },
+      "&::before": { zIndex: '-1' },
+      ":disabled": { filter: 'grayscale(20%) brightness(50%)' }
     },
-    contained: {
-      "&::before": {
-        content: '""',
-        position: 'absolute',
-        inset: 0,
-        borderRadius: 'inherit',
-        background: palette.gradientPrimary,
-      }
-    },
-    outlined: { ...gradientText, ...gradientSvg, ...gradientBorder },
-    text: { ...gradientText, ...gradientSvg },
     loading: {
       WebkitTextFillColor: 'initial !important',
       background: 'initial !important',
@@ -53,6 +41,31 @@ const ButtonStyle: ButtonStyleProps = {
       marginRight: "-4px",
     },
   },
+  variants: [
+    {
+      props: { variant: "text_alt" },
+      style: { 
+        ...gradientText, ...gradientSvg
+      },
+    },
+    {
+      props: { variant: "outlined_alt" },
+      style: { ...gradientText, ...gradientSvg, ...gradientBorder },
+    },
+    {
+      props: { variant: "contained_alt" },
+      style: {
+        background: 'transparent',
+        "&::before": {
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          borderRadius: 'inherit',
+          background: palette.gradientPrimary,
+        }
+      }
+    }
+  ]
 }
 
 export default ButtonStyle;

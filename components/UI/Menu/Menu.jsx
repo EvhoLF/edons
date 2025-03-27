@@ -14,17 +14,17 @@ const Menu = ({
     modifiers: [{ name: "offset", options: { offset } }]
   });
 
-  console.log(popperStyles);
+  // console.log(popperStyles);
   
   return (
     <div
       tabIndex={0}
       onFocus={(e) => {
-        console.log('focus');
+        // console.log('focus');
         setMenuState(true)
       }}
       onBlur={(e) => {
-        console.log('blur');
+        // console.log('blur');
         setMenuState(false)
       }}
     >

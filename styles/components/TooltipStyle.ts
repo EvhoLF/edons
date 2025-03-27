@@ -9,7 +9,7 @@ type TooltipStyleProps = {
 const TooltipStyle: TooltipStyleProps = {
   styleOverrides: {
     tooltip: {
-      background: palette.gradientGlassPrimary, // Фон тултипа
+      background: palette.primary.dark, // Фон тултипа
       padding: ".5rem .75rem", // Отступы
       borderRadius: '.5rem', // Закругление углов
       transition: "all 0.3s",

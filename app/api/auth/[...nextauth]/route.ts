@@ -1,4 +1,4 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { DefaultUser, NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -7,7 +7,7 @@ import connectDB from "@/DB/connectDB";
 import bcrypt from "bcryptjs";
 import { Account } from "@/DB/models/Account";
 
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     Github({
       clientId: process.env.GITHUB_ID!,
@@ -43,7 +43,6 @@ export const authOptions: AuthOptions = {
         const userFound =
           (await User.findOne({ email: credentials.loginEmail }).select('+password')) ||
           (await User.findOne({ authLogin: credentials.loginEmail }).select('+password'));
-        console.log(userFound);
         if (!userFound) throw new Error("User not found");
         if (!(await bcrypt.compare(credentials.password, userFound.password))) throw new Error("Invalid Password");
         return userFound;
@@ -73,6 +72,11 @@ export const authOptions: AuthOptions = {
       return true;
     },
     async jwt({ user, token, account, trigger, session }) {
+
+      if (account && account.provider === "github") {
+        token.github_access_token = account.access_token || null;
+      }
+
       if (trigger === "update" && session) {
         return { ...token, user: session?.user || null, lastProvider: session?.lastProvider || null };
       }
@@ -92,8 +96,10 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user = token.user as IUser;
+      session.user = token.user as unknown as DefaultUser & IUser;
+      session.github_access_token = token?.github_access_token as string | null;
       session.lastProvider = token.lastProvider as string || "";
+
       return session;
     },
   },
@@ -102,4 +108,6 @@ export const authOptions: AuthOptions = {
 };
 
 const auth = NextAuth(authOptions);
-export { auth as GET, auth as POST };
+// export { auth as GET, auth as POST };
+export const GET = auth;
+export const POST = auth;

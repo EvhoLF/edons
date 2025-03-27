@@ -4,6 +4,8 @@ import ButtonStyle from './components/ButtonStyle';
 import InputTextStyle from './components/InputTextStyle';
 import TooltipStyle from './components/TooltipStyle';
 import { palette } from './variables';
+import SelectStyle from './components/SelectStyle';
+import { glassBackground } from './mixins';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -13,6 +15,11 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     primaryGradient?: string;
     ui?: PaletteColorOptions;
+  }
+}
+declare module '@mui/material/Icon' {
+  interface IconPropsColorOverrides {
+    ui: true;
   }
 }
 
@@ -29,17 +36,14 @@ const mui_theme = createTheme({
     MuiTooltip: TooltipStyle,
     MuiButton: ButtonStyle,
     MuiTextField: InputTextStyle,
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          transition: 'all .3s',
-        }
-      }
-    },
-    MuiStack: {
-      defaultProps: {
-        useFlexGap: true,
-      },
+    MuiSelect: SelectStyle,
+    MuiPaper: { styleOverrides: { root: { ...glassBackground } } },
+    MuiInputAdornment: { styleOverrides: { root: { margin: '0' } } },
+    MuiDialog: { styleOverrides: { root: { '& .MuiPaper-root': { background: 'none', }, } } },
+    MuiIconButton: { styleOverrides: { root: { transition: 'all .3s', } }, },
+    MuiStack: { defaultProps: { useFlexGap: true, }, },
+    MuiDivider: {
+      styleOverrides: { root: { margin: '0px !important', '&::before, &::after': { border: 'none', height: "1px", backgroundColor: palette.ui.main } } }
     },
   }
 });

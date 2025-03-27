@@ -1,5 +1,5 @@
 import { Icon } from '@/components/UI/Icon/Icon';
-import InputText from '@/components/UI/InputText/InputText';
+import InputText from '@/components/UI/MUI/InputText';
 import { IconName, icons_names } from '@/data/data_icons';
 import { Button } from '@mui/material';
 import { CSSProperties } from 'react';

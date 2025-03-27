@@ -53,3 +53,7 @@ body {
 *::-webkit-scrollbar-thumb:active {
   background: #eeeeffe6;
 }
+
+.react-flow__renderer {
+  background: transparent !important;
+}

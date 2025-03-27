@@ -1,25 +1,40 @@
 'use client'
-import React from 'react';
-import useRF from '@/hooks/useRF';
+import React, { useMemo } from 'react';
 import PNMCode from './Panels/PNMCode';
 import PNMShape from './Panels/PNMShape';
 
-const PanelNodeManager = () => {
-  const { getNodeSelected } = useRF();
-  const selectedNode = getNodeSelected();
+const PanelNodeManager = ({ selectedNode }) => {
+  if (!selectedNode) return null;
 
-  if (!selectedNode) return '';
   const { type } = selectedNode;
 
-  const Panel = {
-    code: PNMCode,
-    shape: PNMShape,
-  }[type] ?? null
+  const Panel = useMemo(() => {
+    return {
+      code: PNMCode,
+      shape: PNMShape,
+    }[type] ?? null;
+  }, [type]);
 
-  if (!Panel) return ''
+  if (!Panel) return null;
 
-  return <Panel node={selectedNode} />
+  return <Panel node={selectedNode} />;
 };
 
-// export default memo(PanelControlNode, areEqual);
-export default PanelNodeManager
+export default React.memo(PanelNodeManager, (prevProps, nextProps) => {
+  // Сравниваем только необходимые части selectedNode, исключая position
+  const prevNode = prevProps.selectedNode;
+  const nextNode = nextProps.selectedNode;
+
+  if (!prevNode || !nextNode) return prevNode === nextNode;
+
+  return (
+    prevNode.id === nextNode.id &&
+    prevNode.type === nextNode.type &&
+    prevNode.data === nextNode.data &&
+    prevNode.targetPosition === nextNode.targetPosition &&
+    prevNode.sourcePosition === nextNode.sourcePosition &&
+    prevNode.measured === nextNode.measured &&
+    prevNode.selected === nextNode.selected &&
+    prevNode.dragging === nextNode.dragging
+  );
+});

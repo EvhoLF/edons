@@ -1,6 +1,6 @@
 "use client";
-import { Button, ButtonProps } from "@mui/material";
-// import InputButton, { InputButtonProps } from "@/components/UI/InputButton/InputButton";
+import InputButton from "@/components/UI/MUI/InputButton";
+import { ButtonProps } from "@mui/material";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import React, { FC } from "react";
@@ -10,13 +10,18 @@ interface AuthButtonProps extends ButtonProps {
   callbackUrl?: string;
 }
 
-const AuthButton: FC<AuthButtonProps> = ({ provider, children, callbackUrl = '/profile', ...props }) => {
+const AuthButton: FC<AuthButtonProps> = ({ provider, children, callbackUrl, ...props }) => {
   const searchParams = useSearchParams();
   const defaultCbUrl = searchParams.get("callbackUrl") || "/profile";
-  const cbUrl = callbackUrl ?? defaultCbUrl;
+
+  // ⚠️ Проверяем callbackUrl и защищаем от редиректа на /auth/signin
+  let cbUrl = callbackUrl ?? defaultCbUrl;
+  if (cbUrl.includes("/auth/signin")) {
+    cbUrl = "/profile";
+  }
 
   return (
-    <Button
+    <InputButton
       onClick={() => signIn(provider, { callbackUrl: cbUrl })}
       size="large"
       variant="outlined"
@@ -25,7 +30,7 @@ const AuthButton: FC<AuthButtonProps> = ({ provider, children, callbackUrl = '/p
       {...props}
     >
       {children}
-    </Button>
+    </InputButton>
   );
 };
 

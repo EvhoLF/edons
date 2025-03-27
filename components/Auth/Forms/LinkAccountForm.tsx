@@ -1,10 +1,9 @@
 'use client'
 import Frame from "@/components/UI/Frame/Frame";
-import InputButton from "@/components/UI/InputButton/InputButton";
 import { UserAction } from "@/DB/actions/UserAction";
 import { IUser } from "@/DB/models/User";
 import { decryptDataURI, encryptData } from "@/utils/uid_crypto";
-import { Avatar, Box, Grid2, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid2, Stack, Typography } from "@mui/material";
 import { getToken } from "next-auth/jwt";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -108,8 +107,8 @@ const LinkAccountForm = () => {
             </Grid2>
           </Grid2>
           <Stack direction='row' spacing={2}>
-            <InputButton type='submit' variant='outlined' size='large' fullWidth>Отмена</InputButton>
-            <InputButton onClick={handleLinkAccount} type='submit' variant='contained' size='large' fullWidth>Связать</InputButton>
+            <Button type='submit' variant='outlined' size='large' fullWidth>Отмена</Button>
+            <Button onClick={handleLinkAccount} type='submit' variant='contained' size='large' fullWidth>Связать</Button>
           </Stack>
         </Stack>
       </Frame>

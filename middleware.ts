@@ -2,10 +2,10 @@ import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server";
 
 const guestOnlyRoutes = ['/auth/signin', '/auth/signup'];
-const userOnlyRoutes = ['/profile', '/worksapce', '/auth/link-account'];
+const userOnlyRoutes = ['/profile', '/workspace', '/auth/link-account'];
 const adminOnlyRoutes = ['/admin',];
 
-export const config = { matcher: ["/admin", '/profile', '/worksapce/:path*', '/auth/link-account'] }
+export const config = { matcher: ["/admin", '/profile', '/maps/:path*', '/auth/link-account'] }
 
 export default withAuth(
   function middleware(req) {

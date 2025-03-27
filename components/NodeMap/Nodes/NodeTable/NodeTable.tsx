@@ -3,11 +3,11 @@ import { ChangeEvent, memo } from 'react';
 import { Handle, Position, NodeToolbar } from '@xyflow/react';
 import styles from './NodeTable.module.scss'
 import { preventSelfLink } from '@/utils/Nodes/preventSelfLink';
-import Button from '@/components/UI/InputButton/InputButton';
 import { Icon } from '@/components/UI/Icon/Icon';
 import useRF from '@/hooks/useRF';
 import useNodeTransfer from '@/hooks/useNodeTransfer';
 import clsx from 'clsx';
+import { IconButton } from '@mui/material';
 
 interface TableField { idx: number, isKey: boolean, name: string, type: string, }
 
@@ -75,7 +75,7 @@ const NodeTable = ({ id, data }: NodeTable) => {
         minHeight={30}
       /> */}
       <NodeToolbar position={Position.Bottom}>
-        <Button onClick={addTableField}><Icon icon='plus' /></Button>
+        <IconButton onClick={addTableField}><Icon icon='plus' /></IconButton>
       </NodeToolbar>
       <div className={styles.NodeTable}>
         <div className={styles.NodeTable_label}>Table</div>

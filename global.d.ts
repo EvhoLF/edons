@@ -1,10 +1,12 @@
 // import { JWT } from "next-auth/jwt";
+import { DefaultUser } from "next-auth";
 import { IUser } from "./DB/models/User";
 
 declare module "next-auth" {
   interface Session {
-    user: IUser
+    user: DefaultUser & IUser,
     lastProvider?: string,
+    github_access_token?: string | null
     // user: {
     //   id: string;
     //   username?: string,
@@ -19,6 +21,14 @@ declare module "next-auth" {
     //   github?: unknown;
     //   google?: unknown;
     // };
+  }
+  interface User {
+    github_access_token?: string;
+  }
+  interface JWT {
+    user: DefaultUser & IUser & { github_access_token?: string }
+    github_access_token?: string | null;
+    lastProvider?: string;
   }
 }
 

@@ -1,0 +1,105 @@
+.cardMap {
+  position: relative;
+  width: 230px;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+
+  &_content {
+    max-height: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all $transition-medium ease-in-out;
+    overflow: hidden;
+  }
+
+  &_label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #1e101c;
+    opacity: .4;
+    transition: .2s;
+  }
+}
+
+.options {
+  position: absolute;
+  inset: 0;
+  margin: $spacing-sm;
+  display: flex;
+  justify-content: end;
+  // gap: $spacing-sm;
+  transition: all $transition-medium ease-in-out;
+
+  &_item {
+    width: 0; // Начальная ширина 0
+    opacity: 0; // Начальная прозрачность 0
+    // overflow: hidden; // Скрываем содержимое
+    gap: $spacing-sm;
+    transition: all $transition-medium ease-in-out;
+    display: flex; // Убедимся, что элемент flex
+    align-items: start; // Выравниваем элементы по центру
+
+    &.active {
+      width: 30px; // Активные элементы всегда видны
+      opacity: 1;
+    }
+  }
+}
+
+.copyLink {
+  opacity: 0;
+  transition: opacity $transition-medium;
+}
+
+.active {
+  .btnStar.btnStar svg {
+    fill: #ff0;
+  }
+
+  .btnLink.btnLink svg {
+    fill: #0ff;
+  }
+}
+
+.isPublicAccess {
+  position: absolute !important;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  padding: 0 1rem !important;
+  opacity: 0;
+  transition: $transition-medium;
+  z-index: 1;
+}
+
+.cardMap:hover,
+.cardMap:focus-within {
+
+  .options_item {
+    width: 30px; // Ширина при наведении
+    opacity: 1; // Плавное появление
+  }
+
+  .copyLink {
+    opacity: 1;
+  }
+
+  .active {
+    opacity: 1;
+  }
+
+  &::before {
+    opacity: .9;
+  }
+}
