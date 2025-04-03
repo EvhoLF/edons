@@ -9,6 +9,7 @@ import { icons_names } from '@/data/data_icons';
 import Frame from '@/components/UI/Frame/Frame';
 import useRF from '@/hooks/useRF';
 import { Autocomplete, MenuItem, Stack, TextField, InputAdornment, Grid2, Typography } from '@mui/material';
+import DropdownSearchMenu from '@/components/UI/MUI/DropdownSearchMenu';
 
 const PNMCode = React.memo(({ node }) => {
   const { id, data } = node;
@@ -63,14 +64,15 @@ const PNMCode = React.memo(({ node }) => {
             />
           </Grid2>
           <Grid2 item size={4}>
-            <SelectBase
-              value={icon} onChange={handleIconChange}
+            <DropdownSearchMenu value={icon} onChange={handleIconChange} />
+            {/* <SelectBase
+              
               sx={{ maxHeight: '40px', '& .MuiInputBase-inputSizeSmall': { display: 'flex', alignItems: 'center' } }}
               sxFrom={{ width: '100%', }}
               size='small' MenuProps={{ PaperProps: { style: { maxHeight: 36 * 4.3 } } }}
             >
               {icons_names.map((e) => (<MenuItem key={`menuitem-${e}`} value={e}> <Icon icon={e} /> </MenuItem>))}
-            </SelectBase>
+            </SelectBase> */}
           </Grid2>
         </Grid2>
 

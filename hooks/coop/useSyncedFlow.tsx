@@ -1,4 +1,6 @@
+import { IUser } from '@/DB/models/User';
 import { applyEdgeChanges, applyNodeChanges, useEdgesState, useNodesState } from '@xyflow/react';
+import { DefaultUser } from 'next-auth';
 import { useEffect, useCallback, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
@@ -6,7 +8,7 @@ interface useSyncedFlow {
   isPublicAccess: boolean;
   serverUrl: string;
   room: string;
-  thisUserId?: string;
+  thisUser?: DefaultUser & IUser;
 }
 
 interface Users {
@@ -17,7 +19,7 @@ interface Users {
 }
 
 export const useSyncedFlow = ({ thisUser, isPublicAccess, room, serverUrl = 'http://localhost:3005' }: useSyncedFlow) => {
-  const [hasRoom, setHasRoom] = useState(true);
+  const [hasRoom, setHasRoom] = useState(false);
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
   const [orientation, setOrientation] = useState('TB');
@@ -30,7 +32,7 @@ export const useSyncedFlow = ({ thisUser, isPublicAccess, room, serverUrl = 'htt
     const handleBeforeUnload = () => { sock.emit('reactflow-disconected', thisUser.id, room); };
     sock.emit('joinRoomReactflow', thisUser, room);
     sock.on('reactflow', (e) => { if (e) { setNodes(e.nodes); setEdges(e.edges); setOrientation(e.orientation); } });
-    sock.on('reactflow-nodes', (e) => { if (e) setNodes(e); });
+    sock.on('reactflow-nodes-changes', (e) => { if (e && thisUser && e.userId != thisUser.id) { setNodes(pre => applyNodeChanges(e.changes, pre)); }; });
     sock.on('reactflow-edges', (e) => { if (e) setEdges(e); });
     sock.on('reactflow-orientation', (e) => { if (e) setOrientation(e); });
     sock.on('reactflow-users', (e) => { if (e) setUsers(e); });
@@ -42,9 +44,9 @@ export const useSyncedFlow = ({ thisUser, isPublicAccess, room, serverUrl = 'htt
   const updateNodes = useCallback((newValue) => {
     setNodes((prevNodes) => {
       const updatedNodes = typeof newValue === 'function' ? newValue(prevNodes) : newValue;
-      if (isPublicAccess && socket?.connected) {
-        socket.emit('reactflow-nodes', updatedNodes, room);
-      }
+      // if (isPublicAccess && socket?.connected) {
+      //   socket.emit('reactflow-nodes', updatedNodes, room);
+      // }
       return updatedNodes;
     });
   }, [socket, room, isPublicAccess, setNodes]);
@@ -69,11 +71,14 @@ export const useSyncedFlow = ({ thisUser, isPublicAccess, room, serverUrl = 'htt
     });
   }, [socket, room, isPublicAccess, setOrientation]);
 
-  const onNodesChange = (changes) => {
-    setNodes((nds) => {
-      const data = applyNodeChanges(changes, nds);
-      if (isPublicAccess && socket?.connected) socket.emit('reactflow-nodes', data, room);
-      return data;
+  const onNodesChange = (changes = []) => {
+    const new_changes = changes.filter(e => e.type != 'select');
+
+    setNodes((pre) => {
+      if (isPublicAccess && socket?.connected) {
+        socket.emit('reactflow-nodes-changes', { userId: thisUser.id, changes: new_changes, nodes: applyNodeChanges(new_changes, pre) }, room);
+      }
+      return applyNodeChanges(changes, pre);
     });
   };
 

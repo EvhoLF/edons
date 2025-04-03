@@ -28,7 +28,8 @@ function createEdges(files = []) {
 }
 
 export const ParseGitInNode = async (files) => {
-  const nodes = [];
+  // const nodes = [];
+  // const codeDatas = [];
 
   const promises = files.filter(e => e.type == 'blob').map(async (file, i) => {
     const id = Date.now() + "" + i;
@@ -50,20 +51,24 @@ export const ParseGitInNode = async (files) => {
           color: template.data.color,
           icon: template.data.icon,
           codeType: template.data.codeType,
-          codeData: data ?? '',
+          // codeData: data ?? '',
           isClose: true
         },
       };
 
-      nodes.push(node);
-      return node;
+      return { node, codeData: { id, data } };
     } catch (error) {
       return null;
     }
   });
 
   const results = await Promise.all(promises);
-  const newNodes = results.filter(result => result !== null);
+  const validResults = results.filter(result => result !== null);
+
+  const newNodes = validResults.map(result => result.node);
+  const newCodeData = validResults.map(result => result.codeData);
+
   const newEdges = createEdges(newNodes);
-  return { newNodes, newEdges };
+
+  return { newNodes, newEdges, newCodeData };
 };

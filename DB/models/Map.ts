@@ -5,6 +5,10 @@ export enum IMapTypes {
   CODE_RELATION = 'code_relation',
   DATABASE = 'database',
 }
+export enum IOrientations {
+  TB = 'TB',
+  LR = 'LR',
+}
 
 export interface IMap extends Document {
   id: string;
@@ -18,6 +22,8 @@ export interface IMap extends Document {
   lastUpdate: Date;
   nodes: unknown[];
   edges: unknown[];
+  codeDataId: Types.ObjectId;
+  orientation: IOrientations;
 }
 
 const MapSchema = new Schema<IMap>(
@@ -32,6 +38,8 @@ const MapSchema = new Schema<IMap>(
     lastUpdate: { type: Date, default: Date.now },
     nodes: { type: Schema.Types.Mixed, default: [] }, // Поддержка произвольных структур
     edges: { type: Schema.Types.Mixed, default: [] },
+    codeDataId: { type: Schema.Types.ObjectId, ref: 'CodeData', required: false },
+    orientation: { type: String, enum: Object.values(IOrientations), default: IOrientations.TB, required: true },
   },
   {
     toJSON: {

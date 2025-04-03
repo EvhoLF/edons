@@ -109,7 +109,7 @@ const Maps = () => {
           </Button>
         </Grid2>
       </Grid2>
-      <Stack direction='row' spacing={2} flexWrap='wrap' justifyContent={maps.length ? 'start' : 'center'} alignItems='center'>
+      <Stack direction='row' spacing={2} flexWrap='wrap' justifyContent={maps.length ? 'flex-start' : 'center'} alignItems='center'>
         {!!filteredMaps?.length && filteredMaps?.map(el => <CardMap key={el.id} updateMapProperty={updateMapProperty} showModalFormMapOptions={showModalFormMapOptions} {...el} />)}
         <Stack sx={{ aspectRatio: maps.length ? '16 / 9' : undefined }} width={maps.length ? '230px' : '100%'} alignItems='center' justifyContent='center' spacing={2}>
           {maps.length ? '' : <Typography variant="h6">Карт нет. Исправь это!</Typography>}

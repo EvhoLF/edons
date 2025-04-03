@@ -27,14 +27,14 @@ const CardMap: React.FC<ICardMap> = ({ id, label = '', image = null, isFavourite
       <div className={styles.options}>
         <div className={clsx(styles.options_item, isFavourite && styles.active)}>
           <Tooltip title={isPublicAccess ? "Избранная карта" : "Не избранная карта"}>
-            <IconButton onClick={() => updateMapProperty(id as string, { isFavourite: !isFavourite })} size='small' aria-label="stars" sx={{ color: isFavourite ? '#ffee00' : 'ui.dark' }}>
+            <IconButton onClick={() => updateMapProperty(id as string, { isFavourite: !isFavourite })} size='small' aria-label="stars" sx={{ color: isFavourite ? '#eecc00' : 'ui.dark' }}>
               <Icon fontSize='small' icon='stars' />
             </IconButton>
           </Tooltip>
         </div>
         <div className={clsx(styles.options_item, isPublicAccess && styles.active)}>
           <Tooltip title={isPublicAccess ? "Доступно по ссылке" : "Не доступно по ссылке"}>
-            <IconButton onClick={() => updateMapProperty(id as string, { isPublicAccess: !isPublicAccess })} size='small' aria-label="link" sx={{ color: isPublicAccess ? '#00eeff' : 'ui.dark' }}>
+            <IconButton onClick={() => updateMapProperty(id as string, { isPublicAccess: !isPublicAccess })} size='small' aria-label="link" sx={{ color: isPublicAccess ? '#00ccee' : 'ui.dark' }}>
               <Icon fontSize='small' icon='link' />
             </IconButton>
           </Tooltip>

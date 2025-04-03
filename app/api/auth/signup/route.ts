@@ -1,5 +1,7 @@
 import connectDB from '@/DB/connectDB';
+import { LogActions, LogStatuses } from '@/DB/models/Log';
 import { User, UserRole } from '@/DB/models/User';
+import { LogCreate } from '@/DB/services/LogService';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server'
 
@@ -47,10 +49,11 @@ export async function POST(request: Request) {
 
     const newUser = new User(initialUser);
     await newUser.save();
+    LogCreate({ userId: newUser?.id || null, action: LogActions.USER_SIGNUP, status: LogStatuses.SUCCESS, description: `ID - ${newUser?.id || ''}` });
     return NextResponse.json({ message: "User created" }, { status: 201 });
 
   } catch (error) {
-    console.log(error)
+    LogCreate({ userId: null, action: LogActions.USER_SIGNUP, status: LogStatuses.ERROR, description: error });
     return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
   }
 }

@@ -5,9 +5,7 @@ import PNMShape from './Panels/PNMShape';
 
 const PanelNodeManager = ({ selectedNode }) => {
   if (!selectedNode) return null;
-
   const { type } = selectedNode;
-
   const Panel = useMemo(() => {
     return {
       code: PNMCode,

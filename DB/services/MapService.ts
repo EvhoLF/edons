@@ -1,4 +1,5 @@
 import connectDB from "../connectDB";
+import { CodeData, ICodeData } from "../models/CodeData";
 import { IMap, Map } from "../models/Map";
 
 // Получить все карты или карты по userId
@@ -12,14 +13,21 @@ export const MapGetAll = async (userId?: string) => {
 
 // Получить карту по ID
 export const MapGetById = async (id: string) => {
-  await connectDB();
-  return await Map.findById(id);
+  try {
+    await connectDB();
+    return await Map.findById(id);
+  }
+  catch {
+    return;
+  }
 };
 
 // Создать новую карту
-export const MapCreate = async (mapData: Partial<IMap>) => {
+export const MapCreate = async (mapData: Partial<IMap>, codeData_nodes: ICodeData['nodes'] = []) => {
   await connectDB();
-  const map = new Map(mapData);
+  const code_data: ICodeData = new CodeData({ nodes: codeData_nodes });
+  code_data.save();
+  const map = new Map({ ...mapData, codeDataId: code_data._id });
   return map.save();
 };
 

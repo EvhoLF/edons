@@ -1,6 +1,6 @@
 "use client";
-import React, { createContext, use, useCallback, useEffect, useRef, useState } from "react";
-import { ReactFlow, addEdge, Background, Controls, MiniMap, Panel, useEdgesState, useNodesState, ConnectionMode, useKeyPress } from "@xyflow/react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
+import { ReactFlow, addEdge, Background, Controls, MiniMap, Panel, ConnectionMode, useKeyPress, useStore } from "@xyflow/react";
 import '@xyflow/react/dist/style.css';
 import styles from './Map.module.scss'
 import { getLayout } from "@/utils/getLayout";
@@ -14,6 +14,7 @@ import { edgeTypes } from "../Edge";
 import { useDnD } from "@/hooks/DnDProvider";
 import { GetNewNode } from "@/utils/Nodes/NodeManagement";
 import PanelNodeManager from "../PanelControlNode/PanelNodeManager";
+import PanelCode from '../PanelCode/PanelCode'
 import useRF from "@/hooks/useRF";
 import MiniMapNode from "../MiniMapNodes/MiniMapNodes";
 import useHelperLines from "@/hooks/useHelperLines";
@@ -30,15 +31,15 @@ import useGithub from '@/hooks/useGithub'
 import Loader from "@/components/UI/Loader/Loader";
 import { useModal } from "@/hooks/useModal";
 import ModalConfirm from "@/components/Modals/ModalConfirm";
-import { useSyncedState } from "@/hooks/coop/useSyncedState";
 import Cursors from "@/hooks/coop/Cursors";
 import { useSyncedFlow } from "@/hooks/coop/useSyncedFlow";
+import { CodeDataAction } from "@/DB/actions/CodeDataAction";
 
 export const NodesContext = createContext('');
 
-const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
+const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
   const { data: session } = useSession();
-  const { fitView, zoomIn, zoomOut, fitBounds, screenToFlowPosition, getNodeDataField, getNodeSelected } = useRF();
+  const { fitView, zoomIn, zoomOut, fitBounds, screenToFlowPosition, getNodeDataField } = useRF();
   const [isInteractivity, setIsInteractivity] = useState(true);
   useRF_CutCopyPaste();
   const isCtrlPressed = useKeyPress('Shift');
@@ -63,6 +64,7 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
     room: `${mapId}-nodes-edges`,
     serverUrl: 'http://localhost:3005',
   });
+  const [codeData, setCodeData] = useState([]);
 
 
   const onMouseMove = useCallback((event) => {
@@ -98,10 +100,11 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
           setLoading('Файлы загружаются из репозитория, процесс может занять некоторое время');
           try {
             const repoTreeContent = await GitFetchs.RepoTreeContent(repo.full_name, repo.default_branch);
-            const { newNodes, newEdges } = await ParseGitInNode(repoTreeContent);
+            const { newNodes, newEdges, newCodeData } = await ParseGitInNode(repoTreeContent);
             // setNodes([...newNodes]);
             // setEdges([...newEdges]);
             const layouted = getLayout([...newNodes], [...newEdges], 'LR');
+            setCodeData(newCodeData);
             setNodes(() => [...layouted.nodes]);
             setEdges(() => [...layouted.edges]);
             window.requestAnimationFrame(() => { fitView(); });
@@ -140,21 +143,33 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
   useEffect(() => {
     const get = async () => {
       try {
-        if (mapId && !hasRoom) {
+        console.log({
+          zxc: mapId && codeDataId && !hasRoom,
+          mapId,
+          codeDataId,
+          hasRoom
+        });
+
+        if (mapId && codeDataId && !hasRoom) {
           console.log('ЗАГРУЗКА С БД');
           const res = await MapAction.getById(mapId);
-          if (res.error) return;
-          if (res.nodes) setNodes(res.nodes)
-          if (res.edges) setEdges(res.edges)
+          const res_codeData = await CodeDataAction.getById(codeDataId);
+          if (!res || res?.error || res_codeData?.error) return;
+          if (res_codeData) setCodeData(res_codeData.nodes);
+          if (res.nodes) setNodes(res.nodes);
+          if (res.edges) setEdges(res.edges);
+          if (res.orientation) setOrientation(res.orientation);
           fitView();
         }
       }
-      catch {
-        console.log('Ошибка загрузки карты');
+      catch (error) {
+        console.error('Ошибка загрузки карты');
+        console.log(error);
+
       }
     }
     get();
-  }, [mapId]);
+  }, [mapId, codeDataId, hasRoom]);
 
 
   const TakeScreenshot = async () => {
@@ -174,13 +189,25 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
     catch { }
   };
 
+  async function compressImage(element) {
+    const imgData = await domtoimage.toPng(element, { bgcolor: "transparent" });
+    const img = new Image(); img.src = imgData;
+    await new Promise(resolve => img.onload = resolve);
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width / 3; canvas.height = img.height / 3;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const compressedImgData = canvas.toDataURL('image/png');
+    return compressedImgData;
+  }
+
   const saveScreenshot = async () => {
     try {
       const element = document.querySelector('.react-flow__renderer');
       if (!element) return console.error(`Элемент с id .react-flow__renderer не найден`);
       await fitView();
       await new Promise((resolve) => setTimeout(resolve, 500));
-      const imgData = await domtoimage.toPng(element, { bgcolor: "transparent" });
+      const imgData = await compressImage(element);
       return await MapAction.updateImage(mapId, imgData);
     }
     catch { }
@@ -189,8 +216,8 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
   const saveMap = async () => {
     try {
       if (!mapId) return;
-      const res = await MapAction.update(mapId, { nodes, edges, lastUpdate: Date.now() });
-      if (res) console.log({ save: 'save', res });
+      const res = await MapAction.update(mapId, { nodes, edges, orientation, lastUpdate: Date.now() });
+      const res_CodeData = await CodeDataAction.update(codeDataId, { nodes: codeData });
       await saveScreenshot();
       enqueueSnackbar('Карта успешно сохранена', { variant: 'success', });
     }
@@ -199,6 +226,10 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
       console.log('Ошибка сохранения карты');
     }
   }
+
+  const selectedNode = useStore((state) =>
+    state.nodes.find((node) => node.selected) || null
+  );
 
   return (
     <div className={styles.Map}>
@@ -236,12 +267,15 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
                 await NodeAddFromGit();
               }}> GIT ADD </Button>
             </div> */}
-              <Stack spacing={2}>
-                <PanelMenu saveMap={saveMap} TakeScreenshot={TakeScreenshot} LoadFromGitMap={LoadFromGitMap} githubAccess={session?.github_access_token} repos={repos} />
-                <Frame sx={{ width: 'fit-content' }} p={.5}>
-                  <IconButton onClick={saveMap} color='primary'><Icon icon='save' color='ui' /></IconButton>
-                </Frame>
-                <PanelTools />
+              <Stack direction='row' height='100%' spacing={2}>
+                <PanelCode selectedNode={selectedNode} codeData={codeData} />
+                <Stack spacing={2}>
+                  <PanelMenu saveMap={saveMap} TakeScreenshot={TakeScreenshot} LoadFromGitMap={LoadFromGitMap} githubAccess={session?.github_access_token} repos={repos} />
+                  <Frame sx={{ width: 'fit-content' }} p={.5}>
+                    <IconButton onClick={saveMap} color='primary'><Icon icon='save' color='ui' /></IconButton>
+                  </Frame>
+                  <PanelTools />
+                </Stack>
               </Stack>
             </Panel>
             <Panel position="top-right" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -250,7 +284,7 @@ const Map = ({ mapId, mapLabel, isPublicAccess = false }) => {
                   <UserPanel />
                 </Frame>
               </Stack>
-              <PanelNodeManager selectedNode={getNodeSelected()} />
+              <PanelNodeManager selectedNode={selectedNode} />
             </Panel>
 
             <MiniMap

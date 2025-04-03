@@ -37,11 +37,17 @@ declare module "@mui/material/styles" {
   interface Palette {
     primary_alt: PaletteColorOptions;
     ui: PaletteColorOptions;
+    uiDark: PaletteColorOptions;
+    uiColor_yellow: PaletteColorOptions;
+    uiColor_blue: PaletteColorOptions;
   }
 
   interface PaletteOptions {
     primary_alt?: PaletteColorOptions;
     ui?: PaletteColorOptions;
+    uiDark?: PaletteColorOptions;
+    uiColor_yellow?: PaletteColorOptions;
+    uiColor_blue?: PaletteColorOptions;
   }
 }
 
@@ -49,5 +55,8 @@ declare module "@mui/material/SvgIcon" {
   interface SvgIconPropsColorOverrides {
     primary_alt: true;
     ui: true;
+    uiDark: true;
+    uiColor_yellow: true;
+    uiColor_blue: true;
   }
 }

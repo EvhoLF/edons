@@ -18,7 +18,7 @@ export enum UserRole {
 }
 
 export const UserSchemaZod = z.object({
-  authLogin: z.string().trim().min(1).optional().nullable(),
+  authLogin: z.string().trim().min(1, UserErrorMessages.uncorrectAuthLogin).optional().nullable(),
   email: z.string().trim().email(UserErrorMessages.uncorrectEmail),
   name: z.string().trim().min(1, UserErrorMessages.uncorrectName),
   password: z.string().optional().nullable(),

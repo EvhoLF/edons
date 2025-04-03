@@ -13,7 +13,7 @@ export const UserGetById = async (id: string) => {
 
 export const UserGetByLogin = async (login: string) => {
   await connectDB();
-  return await User.findById(login).select("-password");
+  return await User.findOne({ login }).select("-password");
 };
 
 export const UserGetByEmail = async (email: string) => {

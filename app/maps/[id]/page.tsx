@@ -4,9 +4,10 @@ import Head from "next/head";
 import { DnDProvider } from "@/hooks/DnDProvider";
 import { MapGetById } from "@/DB/services/MapService";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { IMap } from "@/DB/models/Map";
+import { authOptions } from "@/libs/auth";
+import { UserRole } from "@/DB/models/User";
 
 export async function generateMetadata({ params }) {
   const { id } = await params
@@ -18,12 +19,9 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }: { params: { id: string } }) {
   const { id: mapId } = await params
   const session = await getServerSession(authOptions);
-
   if (!mapId || !session || !session.user) return redirect("/maps/");
-
   const map: IMap | undefined = await MapGetById(mapId);
-
-  if (!map || (map.userId.toString() !== session?.user?.id && !map.isPublicAccess)) return redirect("/maps/");
+  if (!map || !map.codeDataId || (map.userId.toString() !== session?.user?.id && !map.isPublicAccess && session.user.role != UserRole.ADMIN)) return redirect("/maps/");
 
   return (
     <>
@@ -33,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       </Head>
       <ReactFlowProvider>
         <DnDProvider>
-          <Map mapId={mapId} mapLabel={map.label} isPublicAccess={map.isPublicAccess}/>
+          <Map mapId={mapId} codeDataId={map.codeDataId?.toString()} mapLabel={map.label} isPublicAccess={map.isPublicAccess} />
         </DnDProvider>
       </ReactFlowProvider>
     </>

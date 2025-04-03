@@ -4,6 +4,11 @@ const API_BASE = "/api/user";
 
 export const UserAction = {
   // Получить пользователя по ID
+  async getAll(): Promise<IUser[] | null> {
+    const res = await fetch(`${API_BASE}`);
+    return await res.json();
+  },
+
   async getById(id: string): Promise<IUser | null> {
     const res = await fetch(`${API_BASE}/${id}`);
     return await res.json();

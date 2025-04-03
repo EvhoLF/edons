@@ -1,18 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const io = require('socket.io')(3005, {
-  cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST']
-  }
-})
-
-// const UserInitial = { id: '', name: '', image: '', pos: [0, 0] }
+  cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] }
+});
 
 const rooms = {};
+
 io.on("connection", (socket) => {
-  socket.on('joinRoom', (room) => {
-    socket.join(room);
-  });
   socket.on('joinRoomReactflow', (thisUser, room) => {
     if (!room || !thisUser) return;
     socket.join(room);
@@ -20,35 +12,31 @@ io.on("connection", (socket) => {
     rooms[room].users.push({ id: thisUser.id, name: thisUser.name, image: thisUser.image, pos: [0, 0] });
     socket.emit('reactflow', { ...rooms[room] });
   });
-  socket.on('reactflow-nodes', (data, room) => {
+
+  const updateRoom = (room, key, data) => {
     if (!room || !rooms[room]) return;
-    rooms[room]['nodes'] = data;
-    io.to(room).emit('reactflow-nodes', data);
-  });
-  socket.on('reactflow-edges', (data, room) => {
+    rooms[room][key] = data;
+    io.to(room).emit(key, data);
+  };
+
+  socket.on('reactflow-nodes', (data, room) => updateRoom(room, 'nodes', data));
+  socket.on('reactflow-edges', (data, room) => updateRoom(room, 'edges', data));
+  socket.on('reactflow-orientation', (data, room) => updateRoom(room, 'orientation', data));
+  socket.on('reactflow-users', (data, room) => updateRoom(room, 'users', data));
+
+  socket.on('reactflow-nodes-changes', ({ userId = '', changes = [], nodes = [] }, room) => {
     if (!room || !rooms[room]) return;
-    rooms[room]['edges'] = data;
-    io.to(room).emit('reactflow-edges', data);
-  });
-  socket.on('reactflow-orientation', (data, room) => {
-    if (!room || !rooms[room]) return;
-    rooms[room]['orientation'] = data;
-    io.to(room).emit('reactflow-orientation', data);
-  });
-  socket.on('reactflow-users', (data, room) => {
-    if (!room || !rooms[room]) return;
-    rooms[room]['users'] = data;
-    io.to(room).emit('reactflow-users', data);
-  });
-  socket.on('reactflow-disconected', (res, room) => {
-    if (rooms[room]?.users && rooms[room].users.length) {
-      rooms[room].users = rooms[room].users.filter(user => user.id !== res);
-      io.to(room).emit('reactflow-users', rooms[room].users);
-    }
-  })
-  socket.on('message', (message, room) => {
-    if (room) io.to(room).emit('message', message);
+    rooms[room].nodes = nodes;
+    io.to(room).emit('reactflow-nodes-changes', { userId, changes });
   });
 
-  socket.on('disconected', () => { console.log('disconected'); })
+  socket.on('reactflow-disconected', (userId, room) => {
+    if (!room || !rooms[room]) return;
+    rooms[room].users = rooms[room].users.filter(user => user.id !== userId);
+    io.to(room).emit('reactflow-users', rooms[room].users);
+  });
+
+  socket.on('message', (message, room) => { if (room) io.to(room).emit('message', message); });
+
+  socket.on('disconnect', () => console.log('disconnected'));
 });

@@ -5,7 +5,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: flex-end;
 
   &_content {
     max-height: 24px;
@@ -36,7 +36,7 @@
   inset: 0;
   margin: $spacing-sm;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   // gap: $spacing-sm;
   transition: all $transition-medium ease-in-out;
 
@@ -47,7 +47,7 @@
     gap: $spacing-sm;
     transition: all $transition-medium ease-in-out;
     display: flex; // Убедимся, что элемент flex
-    align-items: start; // Выравниваем элементы по центру
+    align-items: flex-start; // Выравниваем элементы по центру
 
     &.active {
       width: 30px; // Активные элементы всегда видны

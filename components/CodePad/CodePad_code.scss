@@ -1,18 +1,34 @@
+.cm-theme {
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: auto !important;
+}
+
 .cm-editor {
   background: none !important;
   outline: none !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  font-size: 12px;
 }
 
-.cm-theme{
-  
-}
 .cm-gutters {
-  transform: translateX(-1px);
-  // background: #202026 !important;
+  background: #de216320 !important;
+  overflow: hidden;
 }
 
-.cm-gutterElement {}
-
-.cm-scroller {
-  overflow: auto !important;
+.cm-activeLineGutter {
+  background: #de216310 !important;
+  color: #fff;
+  // border-radius: 100px !important;
 }
+
+.cm-activeLine {
+  background: #de216310 !important;
+}
+
+// .cm-gutterElement {}
+
+// .cm-scroller {
+//   overflow: auto !important;
+// }

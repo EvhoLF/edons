@@ -1,5 +1,4 @@
 'use client'
-import Frame from "@/components/UI/Frame/Frame";
 import { Icon } from "@/components/UI/Icon/Icon";
 import InputButton from "@/components/UI/MUI/InputButton";
 import InputText from "@/components/UI/MUI/InputText";
@@ -37,6 +36,10 @@ const ProfileForm = () => {
   const [form, setForm] = useState<formType>(initialForm);
   const [error, setError] = useState<ValidationError>({});
   const [isChanged, setIsChanged] = useState(true);
+
+
+  console.log(session);
+
 
   useEffect(() => {
     const updateForm = async () => {
@@ -96,9 +99,7 @@ const ProfileForm = () => {
       let updateData = { authLogin, name, email, image, }
       let new_errors = null
       const res: IUser | IErrorResponse | null = await UserAction.update(session.user.id, updateData);
-      if (res?.errors) {
-        new_errors = { ...res.errors }
-      }
+      if (res?.errors) new_errors = { ...res.errors }
       if (imageData) {
         const resImg: IUser | IErrorResponse | null = await UserAction.uploadAvatar(session.user.id, imageData);
         if (resImg?.errors) new_errors = { ...new_errors, ...resImg.errors }
