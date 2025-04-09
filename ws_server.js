@@ -22,7 +22,10 @@ io.on("connection", (socket) => {
   socket.on('reactflow-nodes', (data, room) => updateRoom(room, 'nodes', data));
   socket.on('reactflow-edges', (data, room) => updateRoom(room, 'edges', data));
   socket.on('reactflow-orientation', (data, room) => updateRoom(room, 'orientation', data));
-  socket.on('reactflow-users', (data, room) => updateRoom(room, 'users', data));
+  socket.on('reactflow-users', (data, room) => {
+    io.to(room).emit('reactflow-users', data);
+    updateRoom(room, 'users', data);
+  });
 
   socket.on('reactflow-nodes-changes', ({ userId = '', changes = [], nodes = [] }, room) => {
     if (!room || !rooms[room]) return;

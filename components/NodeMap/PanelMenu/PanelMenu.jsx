@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { Stack, IconButton, Typography, Divider, Button } from '@mui/material';
+import { Stack, IconButton, Typography, Divider, Button, Link } from '@mui/material';
 import { Icon } from '@/components/UI/Icon/Icon';
 import Frame from '@/components/UI/Frame/Frame';
 import NextLinkButton from '@/components/UI/MUI/NextLinkButton';
@@ -32,7 +32,7 @@ const PanelMenu = ({ saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGi
         stack={{ spacing: 1 }}
       >
         <Stack>
-          <Typography variant='h5' textAlign='center'>EDONs</Typography>
+          <Link href='/' draggable="false" border='none' sx={{ textDecoration: 'none' }}><Typography variant='h5' textAlign='center'>EDONs</Typography></Link>
         </Stack>
         <Divider />
         <NextLinkButton href='/maps' draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Карты</Typography></NextLinkButton>

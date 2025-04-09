@@ -68,7 +68,7 @@ const SignupForm = () => {
                 <Button type='submit' variant='contained' size='large' fullWidth>Зарегистрироваться</Button>
                 <Typography variant='caption' textAlign='center' >
                   <InputLink fontSize='14px' href='/auth/signin'>
-                    <Typography variant='caption' color='textPrimary' sx={{ fontSize: 'inherit', fontWeight: 'inherit' }}>Уже есть аккаунт?</Typography> Войти</InputLink>
+                    <Typography variant='caption' color='textPrimary' sx={{ fontSize: 'inherit', fontWeight: 'inherit' }}>Уже есть аккаунт?</Typography> Авторизироваться</InputLink>
                 </Typography>
               </Stack>
             </Stack>

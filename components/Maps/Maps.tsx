@@ -114,7 +114,7 @@ const Maps = () => {
         <Stack sx={{ aspectRatio: maps.length ? '16 / 9' : undefined }} width={maps.length ? '230px' : '100%'} alignItems='center' justifyContent='center' spacing={2}>
           {maps.length ? '' : <Typography variant="h6">Карт нет. Исправь это!</Typography>}
           <Tooltip title="Создать карту">
-            <IconButton onClick={showModalFormMapCreate} color='primary' size='large' sx={{ background: '#1e101c50', width: 'fit-content', height: 'fit-content' }}>
+            <IconButton onClick={showModalFormMapCreate} color='primary' size='large' sx={{ background: '#25142270', width: 'fit-content', height: 'fit-content' }}>
               <Icon icon='plus' color='ui' />
             </IconButton>
           </Tooltip>

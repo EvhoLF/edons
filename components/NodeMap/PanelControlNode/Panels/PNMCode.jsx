@@ -27,69 +27,68 @@ const PNMCode = React.memo(({ node }) => {
   );
 
   const handleIconChange = useCallback(
-    (e) => updateNodeData(id, { icon: e.target.value }),
+    (e) => updateNodeData(id, { icon: e }),
     [id, updateNodeData]
   );
 
-  const handleCodeTypeChange = useCallback(
-    (event, newValue) => {
-      if (newValue?.id) updateNodeData(id, { codeType: newValue.id });
-    },
-    [id, updateNodeData]
-  );
-
-  // console.log(data_codeTypes);
+  const handleCodeTypeChange = (e) => { if (e) updateNodeData(id, { codeType: e }); }
 
   const codeTypeOptions = useMemo(
-    () => Object.values(data_codeTypes).map((e) => ({ id: e.type, label: e.name, color: data_nodeTypesTemplate[e.type] })),
+    () => Object.values(data_codeTypes).map((e) => ({ id: e.type, name: e.name, icon: e.type, color: data_nodeTypesTemplate[e.type] })),
     []
   );
 
-  const selectedCodeType = useMemo(
-    () => (data_codeTypes[codeType] ? { id: codeType, label: data_codeTypes[codeType].name } : null),
-    [codeType]
-  );
+  const iconItems = useMemo(() => icons_names.map((name) => ({ id: name, icon: name, name, color: "#eef", })), []);
+  const nodeTypesArray = useMemo(() => Object.values(data_nodeTypesTemplate), []);
+
+  const selectedTemplate = (e) => {
+    const { color, icon, codeType } = data_nodeTypesTemplate[e];
+    updateNodeData(id, { color, icon, codeType })
+  };
 
   return (
     <Frame sx={{ padding: '.75rem', maxWidth: '250px' }}>
       <Stack spacing={1.5}>
-        <Typography variant='h6'>Параметры</Typography>
+        <Stack direction='row' justifyContent='space-between'>
+          <Typography variant='h6'>Параметры</Typography>
+          <DropdownSearchMenu
+            onChange={selectedTemplate}
+            data={nodeTypesArray}
+            getLabel={(item) => item.name}
+            getIcon={(item) => item.icon}
+            getColor={(item) => item.color}
+          >
+            <Icon icon='template' color='ui' />
+          </DropdownSearchMenu>
+        </Stack>
 
         <InputText value={label} onChange={handleLabelChange} size='small' startIcon='title' placeholder='Label' />
 
         <Grid2 container spacing={1}>
-          <Grid2 item size={8}>
+          <Grid2 item size={9}>
             <InputText value={color} onChange={handleColorChange} size='small' placeholder='Color: #------'
               startAdornment={<InputColor color={color} onChange={(e) => updateNodeData(id, { color: e })} />}
             />
           </Grid2>
-          <Grid2 item size={4}>
-            <DropdownSearchMenu value={icon} onChange={handleIconChange} />
-            {/* <SelectBase
-              
-              sx={{ maxHeight: '40px', '& .MuiInputBase-inputSizeSmall': { display: 'flex', alignItems: 'center' } }}
-              sxFrom={{ width: '100%', }}
-              size='small' MenuProps={{ PaperProps: { style: { maxHeight: 36 * 4.3 } } }}
-            >
-              {icons_names.map((e) => (<MenuItem key={`menuitem-${e}`} value={e}> <Icon icon={e} /> </MenuItem>))}
-            </SelectBase> */}
+          <Grid2 item size={3}>
+            <DropdownSearchMenu
+              value={icon}
+              onChange={(id) => handleIconChange(id)}
+              data={iconItems}
+              getLabel={(item) => item.name}
+              getIcon={(item) => item.icon}
+            />
           </Grid2>
         </Grid2>
 
-        <Autocomplete
-          sx={{ maxHeight: '40px', '.MuiInputBase-inputSizeSmall.MuiInputBase-input': { padding: '2.5px 8px 2.5px 4px !important' } }}
-          size='small' options={codeTypeOptions} value={selectedCodeType} onChange={handleCodeTypeChange}
-          // disablePortal
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              placeholder='Code type'
-              InputProps={{ ...params.InputProps, startAdornment: (<InputAdornment position='start' sx={{ paddingLeft: '8px', paddingRight: '14px' }}> <Icon icon='code' /> </InputAdornment>), }}
-            />
-          )}
-          renderOption={(props, option) => {
-            return (<li {...props} key={option.id}> <Stack color={option.color} direction='row' spacing={2}> <Icon icon={option.id} /> {option.label} </Stack> </li>)
-          }}
+        <DropdownSearchMenu
+          value={codeType}
+          onChange={(id) => handleCodeTypeChange(id)}
+          data={codeTypeOptions}
+          getLabel={(item) => item.name}
+          getIcon={(item) => item.icon}
+          getColor={(item) => item.color}
+          isInputText
         />
       </Stack>
     </Frame>

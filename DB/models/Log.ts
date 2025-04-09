@@ -51,5 +51,5 @@ const LogSchema = new Schema<ILog>(
   }
 );
 
-const LogModel = (models.Log as Model<ILog>) || model<ILog>('Log', LogSchema);
+const LogModel = (models?.Log as Model<ILog>) || model<ILog>('Log', LogSchema);
 export { LogModel as Log };

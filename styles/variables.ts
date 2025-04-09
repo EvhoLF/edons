@@ -8,7 +8,7 @@ export const palette = {
   uiColor_blue: { main: '#00ccee' },
   glass: {
     border: '#ffc8ed17',
-    bg: '#1e101c70',
+    bg: '#25142270',
   },
   dark: '#120911',
   gradientPrimary: `linear-gradient(150deg, #df1b7d, #dd2748)`,

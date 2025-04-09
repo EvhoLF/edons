@@ -143,15 +143,8 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
   useEffect(() => {
     const get = async () => {
       try {
-        console.log({
-          zxc: mapId && codeDataId && !hasRoom,
-          mapId,
-          codeDataId,
-          hasRoom
-        });
-
         if (mapId && codeDataId && !hasRoom) {
-          console.log('ЗАГРУЗКА С БД');
+          setLoading('Файлы загружаются из базы, процесс может занять некоторое время');
           const res = await MapAction.getById(mapId);
           const res_codeData = await CodeDataAction.getById(codeDataId);
           if (!res || res?.error || res_codeData?.error) return;
@@ -165,7 +158,9 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
       catch (error) {
         console.error('Ошибка загрузки карты');
         console.log(error);
-
+      }
+      finally {
+        setLoading('');
       }
     }
     get();

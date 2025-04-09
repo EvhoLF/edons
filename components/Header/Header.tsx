@@ -1,7 +1,7 @@
 import React from 'react'
 import InputLink from '../UI/MUI/InputLink'
 import { Icon } from '../UI/Icon/Icon'
-import { IconButton, Link, Stack, Tooltip, Typography } from '@mui/material'
+import { Link, Stack, Typography } from '@mui/material'
 import styles from "./Header.module.scss"
 import Frame from '../UI/Frame/Frame'
 import clsx from 'clsx'
@@ -29,7 +29,7 @@ const Header = async ({ unfixed = false }) => {
                 </Stack>
               </Link>
               <Stack direction='row' spacing={2} alignItems='center'>
-                <InputLink href='#'>Документация</InputLink>
+                <InputLink href='/documentation'>Документация</InputLink>
                 <InputLink href='/contact'>Конаткты </InputLink>
                 <InputLink href='/maps'>Карты</InputLink>
               </Stack>

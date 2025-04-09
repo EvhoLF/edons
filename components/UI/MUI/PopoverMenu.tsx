@@ -4,7 +4,7 @@ import { Popover, Stack, PopoverOrigin, SxProps, Theme, StackProps, ClickAwayLis
 
 interface PopoverMenuProps {
   children: ReactNode,
-  openButton: ({ handleOpen }: { handleOpen: (event: MouseEvent<HTMLElement>) => void }) => ReactNode;
+  openButton: ({ handleOpen, handleClose, isOpen }: { isOpen: boolean, handleOpen: (event: MouseEvent<HTMLElement>,) => void, handleClose: (event: MouseEvent<HTMLElement>,) => void }) => ReactNode;
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;
   sxStack?: SxProps<Theme> | undefined
@@ -26,7 +26,7 @@ const PopoverMenu: React.FC<PopoverMenuProps> = ({ openButton, children, anchorO
   const open = Boolean(anchorEl);
   return (
     <>
-      {openButton({ handleOpen })}
+      {openButton({ handleOpen, handleClose, isOpen: !!anchorEl })}
       <Popover
         open={open}
         anchorEl={anchorEl}

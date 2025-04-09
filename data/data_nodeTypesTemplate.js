@@ -35,7 +35,7 @@ export const data_nodeTypesTemplate = {
   ruby: { id: 'ruby', name: 'Ruby', color: '#f44356', icon: 'ruby', codeType: 'text' },
   // rust: 
   java: { id: 'java', name: 'Java', color: '#e45336', icon: 'java', codeType: 'java' },
-  csharp: { id: 'csharp', name: 'C#', color: '#8b6bc6', icon: 'csharp', codeType: 'csharp' },
+  csharp: { id: 'csharp', name: 'C#', color: '#9b5be6', icon: 'csharp', codeType: 'csharp' },
   cpp: { id: 'cpp', name: 'C++', color: '#0288d1', icon: 'cpp', codeType: 'cpp' },
   sql: { id: 'sql', name: 'SQL', color: '#3476d0', icon: 'sql', codeType: 'sql' },
   shellscript: { id: 'shellscript', name: 'ShellScript', color: '#03a9f4', icon: 'shellscript', codeType: 'text' },

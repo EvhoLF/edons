@@ -18,7 +18,7 @@ interface Users {
   pos: [number, number],
 }
 
-export const useSyncedFlow = ({ thisUser, isPublicAccess, room, serverUrl = 'http://localhost:3005' }: useSyncedFlow) => {
+export const useSyncedFlow = ({ thisUser, isPublicAccess = false, room, serverUrl = 'http://localhost:3005' }: useSyncedFlow) => {
   const [hasRoom, setHasRoom] = useState(false);
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);

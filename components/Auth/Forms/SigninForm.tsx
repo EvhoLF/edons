@@ -53,7 +53,7 @@ const SigninForm = () => {
           <form style={{ width: "100%" }} onSubmit={handleSubmit}>
             <Stack spacing={3} padding={2} alignItems="center">
               <Typography variant="h4" gutterBottom textAlign="center">
-                Войти
+                Авторизация
               </Typography>
               <InputText
                 onChange={setField("loginEmail")}

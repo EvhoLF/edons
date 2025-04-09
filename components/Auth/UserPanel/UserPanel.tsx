@@ -6,7 +6,7 @@ import { memo } from 'react';
 
 const UserPanel = () => {
   const { data: session } = useSession();
-  if (!session || !session?.user?.image) return <InputButton variant='contained' startIcon='profile' href='/profile'>Профиль</InputButton>
+  if (!session) return <InputButton variant='contained' startIcon='profile' href='/profile'>Войти</InputButton>
   return (
     <Link href='/profile' sx={{ textDecoration: 'none' }} color='ui'>
       <Stack direction='row' justifyContent='center' alignItems='center' spacing={1}>

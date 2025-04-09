@@ -53,4 +53,4 @@ const MapSchema = new Schema<IMap>(
   }
 );
 
-export const Map = models.Map || model<IMap>('Map', MapSchema);
+export const Map = models?.Map || model<IMap>('Map', MapSchema);

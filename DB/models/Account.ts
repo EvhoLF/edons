@@ -33,4 +33,4 @@ const AccountSchema = new Schema<IAccount>(
 );
 
 // Правильное использование существующей модели, если она уже создана
-export const Account = models.accounts || model<IAccount>('accounts', AccountSchema);
+export const Account = models?.accounts || model<IAccount>('accounts', AccountSchema);
