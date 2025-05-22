@@ -4,7 +4,7 @@ export const data_nodeTypesTemplate = {
   html: { id: 'html', name: 'HTML', color: '#e44d26', icon: 'html', codeType: 'html' },
   css: { id: 'css', name: 'CSS', color: '#42a5f5', icon: 'css', codeType: 'css' },
   js: { id: 'js', name: 'JavaScript', color: '#ffca28', icon: 'js', codeType: 'js' },
-  ts: { id: 'ts', name: 'TypeScript', color: '#3178c6', icon: 'ts', codeType: 'text' },
+  ts: { id: 'ts', name: 'TypeScript', color: '#3178c6', icon: 'ts', codeType: 'ts' },
   // web frameworks
   react: { id: 'react', name: 'React', color: '#58C4DC', icon: 'react', codeType: 'js' },
   react_ts: { id: 'react_ts', name: 'React Ts', color: '#3178c6', icon: 'react', codeType: 'ts' },

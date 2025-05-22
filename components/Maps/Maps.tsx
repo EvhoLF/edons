@@ -1,5 +1,6 @@
 'use client'
-import { Box, Button, Grid2, IconButton, MenuItem, SelectChangeEvent, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
+import { Box, Button, IconButton, MenuItem, SelectChangeEvent, Skeleton, Stack, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material'
+
 import React, { useEffect, useState } from 'react'
 import InputText from '../UI/MUI/InputText'
 import CardMap from './CardMap/CardMap'
@@ -11,6 +12,8 @@ import { useModal } from '@/hooks/useModal'
 import ModalFormMapCreate from '../Modals/ModalFormMapCreate'
 import ModalFormMapOptions from '../Modals/ModalFormMapOptions'
 import SelectBase from '../UI/MUI/SelectBase'
+import Frame from '../UI/Frame/Frame'
+import LoaderCircular from '../UI/Loader/LoaderCircular'
 
 const sortOptions = {
   NAME_ASC: { label: 'Название (A-Z)', compare: (a: IMap, b: IMap) => a.label.localeCompare(b.label) },
@@ -30,6 +33,7 @@ const Maps = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortType, setSortType] = useState<keyof typeof sortOptions>('FAVOURITES');
   const [filterType, setFilterType] = useState<'ALL' | 'FAVOURITES' | 'PUBLIC'>('ALL');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const updateForm = async () => {
@@ -40,6 +44,7 @@ const Maps = () => {
           setMaps(sortedMaps);
         }
       }
+      setLoading(false);
     }
     updateForm();
   }, [session?.user?.id]);
@@ -77,49 +82,112 @@ const Maps = () => {
 
   return (
     <Stack>
-      <Grid2 container spacing={2} py={2}>
-        <Grid2 size={5} component="div">
-          <InputText fullWidth placeholder="Поиск" startIcon='search' onChange={(e) => setSearchQuery(e.target.value)} />
-        </Grid2>
-        <Grid2 size={3} component="div">
-          <SelectBase fullWidth value={sortType} onChange={handleSortChange} startAdornment={<Icon icon='sortDown' />}>
-            {Object.entries(sortOptions).map(([key, { label }]) => (
-              <MenuItem key={key} value={key}>{label}</MenuItem>
-            ))}
-          </SelectBase>
-        </Grid2>
-        <Grid2 size={2} component="div">
-          <ToggleButtonGroup sx={{ width: '100%' }} color='primary' fullWidth value={filterType} exclusive onChange={handleFilterChange}>
-            <Tooltip title="Показать все карты">
-              <ToggleButton value="ALL"><Typography fontWeight='700'>все</Typography></ToggleButton>
-            </Tooltip>
-            <Tooltip title="Показать только избранные карты">
-              <ToggleButton value="FAVOURITES"><Icon icon='stars' /></ToggleButton>
-            </Tooltip>
-            <Tooltip title="Показать только карты с открытым доступом">
-              <ToggleButton value="PUBLIC"><Icon icon='link' /></ToggleButton>
-            </Tooltip>
-          </ToggleButtonGroup>
-        </Grid2>
-        <Grid2 size={2} component="div">
-          <Button onClick={showModalFormMapCreate} fullWidth sx={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }} size='large' variant='outlined' color='primary'>
-            <Box>
-              Создать карту
-            </Box>
-          </Button>
-        </Grid2>
-      </Grid2>
-      <Stack direction='row' spacing={2} flexWrap='wrap' justifyContent={maps.length ? 'flex-start' : 'center'} alignItems='center'>
-        {!!filteredMaps?.length && filteredMaps?.map(el => <CardMap key={el.id} updateMapProperty={updateMapProperty} showModalFormMapOptions={showModalFormMapOptions} {...el} />)}
-        <Stack sx={{ aspectRatio: maps.length ? '16 / 9' : undefined }} width={maps.length ? '230px' : '100%'} alignItems='center' justifyContent='center' spacing={2}>
-          {maps.length ? '' : <Typography variant="h6">Карт нет. Исправь это!</Typography>}
-          <Tooltip title="Создать карту">
-            <IconButton onClick={showModalFormMapCreate} color='primary' size='large' sx={{ background: '#25142270', width: 'fit-content', height: 'fit-content' }}>
-              <Icon icon='plus' color='ui' />
-            </IconButton>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,      // 2 * 8px = 16px
+          py: 2,
+          '& > *': {   // Общий стиль для всех непосредственных потомков
+            boxSizing: 'border-box',
+            minWidth: '200px',
+            flex: {
+              xs: '1 1 100%',
+              sm: '1 1 calc(50% - 8px)',         // 1 gap = 16px → делим пополам = 8px
+              md: '1 1 calc(33.33% - 10.66px)',   // 2 gap = 32px → 32/3 ≈ 10.66px
+              lg: '1 1 calc(25% - 12px)',         // 3 gap = 48px → 48/4 = 12px
+            },
+          },
+        }}
+      >
+        {/* Поиск */}
+        <InputText
+          fullWidth
+          placeholder="Поиск"
+          startIcon="search"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+        />
+
+        {/* Сортировка */}
+        <SelectBase
+          fullWidth
+          value={sortType}
+          onChange={handleSortChange}
+          startAdornment={<Icon icon="sortDown" />}
+        >
+          {Object.entries(sortOptions).map(([key, { label }]) => (
+            <MenuItem key={key} value={key}>
+              {label}
+            </MenuItem>
+          ))}
+        </SelectBase>
+
+        {/* Фильтры */}
+        <ToggleButtonGroup
+          fullWidth
+          color="primary"
+          value={filterType}
+          exclusive
+          onChange={handleFilterChange}
+        >
+          <Tooltip title="Показать все карты">
+            <ToggleButton value="ALL">
+              <Typography fontWeight={700}>все</Typography>
+            </ToggleButton>
           </Tooltip>
+          <Tooltip title="Показать избранные">
+            <ToggleButton value="FAVOURITES">
+              <Icon icon="stars" />
+            </ToggleButton>
+          </Tooltip>
+          <Tooltip title="Показать публичные">
+            <ToggleButton value="PUBLIC">
+              <Icon icon="link" />
+            </ToggleButton>
+          </Tooltip>
+        </ToggleButtonGroup>
+
+        {/* Кнопка */}
+        <Button
+          fullWidth
+          variant="outlined"
+          color="primary"
+          size="large"
+          onClick={showModalFormMapCreate}
+          sx={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          Создать карту
+        </Button>
+      </Box>
+      {loading ? (
+        <Stack
+          direction="row"
+          spacing={2}
+          flexWrap="wrap"
+          paddingTop={4}
+          justifyContent="center"
+        >
+          <LoaderCircular />
         </Stack>
-      </Stack>
+      ) : (
+        <Stack direction='row' spacing={2} flexWrap='wrap' justifyContent={maps.length ? 'flex-start' : 'center'} alignItems='center'>
+          {!!filteredMaps?.length && filteredMaps?.map(el => <CardMap key={el.id} updateMapProperty={updateMapProperty} showModalFormMapOptions={showModalFormMapOptions} {...el} />)}
+          <Stack sx={{ aspectRatio: maps.length ? '16 / 9' : undefined }} width={maps.length ? '230px' : '100%'} alignItems='center' justifyContent='center' spacing={2}>
+            {maps.length ? '' : <Typography variant="h6">Карт нет. Исправь это!</Typography>}
+            <Tooltip title="Создать карту">
+              <IconButton onClick={showModalFormMapCreate} color='primary' size='large' sx={{ background: '#25142270', width: 'fit-content', height: 'fit-content' }}>
+                <Icon icon='plus' color='ui' />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        </Stack>
+      )}
     </Stack>
   )
 }

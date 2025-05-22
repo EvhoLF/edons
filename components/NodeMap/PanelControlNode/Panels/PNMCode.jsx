@@ -11,10 +11,12 @@ import useRF from '@/hooks/useRF';
 import { Autocomplete, MenuItem, Stack, TextField, InputAdornment, Grid2, Typography } from '@mui/material';
 import DropdownSearchMenu from '@/components/UI/MUI/DropdownSearchMenu';
 
-const PNMCode = React.memo(({ node }) => {
-  const { id, data } = node;
+const PNMCode = ({ node }) => {
+  const { updateNodeData, getNode } = useRF();
+  const a_node = getNode(node.id);
+  // if (!a_node) return <></>;
+  const { id, data } = a_node || { id: null, data: { label: '', color: '', icon: '', codeType: '' } };
   const { label, color, icon, codeType } = data;
-  const { updateNodeData } = useRF();
 
   const handleLabelChange = useCallback(
     (e) => updateNodeData(id, { label: e.target.value }),
@@ -93,6 +95,6 @@ const PNMCode = React.memo(({ node }) => {
       </Stack>
     </Frame>
   );
-});
+};
 
 export default PNMCode;

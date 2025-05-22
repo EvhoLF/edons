@@ -38,11 +38,7 @@ const NodeCode = ({ id, data, selected }) => {
       <div className={styles.titleBlock}>
         <Icon className={styles.titleBlock_icon} icon={icon} sx={{ color: color }} />
         <div className={styles.titleBlock_title}>{label}</div>
-      </div>
-      <div className={styles.controls}>
-        <div className={styles.controls_codeType}>
-          {codeType}
-        </div>
+        <div className={styles.controls_codeType}>{codeType}</div>
       </div>
       {!isHorizontal && handles_items}
     </div >

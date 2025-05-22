@@ -6,14 +6,14 @@ interface SyncUsers {
   id: string,
   name: string,
   image: string,
-  cursor: [number, number]
+  pos: [number, number]
 }
 
 function Cursors({ syncUsers, thisUserId }: { syncUsers: SyncUsers[], thisUserId: string | undefined }) {
   const syncUsers_otherUsers = thisUserId ? syncUsers.filter(e => e.id != thisUserId) : syncUsers
   return (
     <EdgeLabelRenderer>
-      {syncUsers_otherUsers && syncUsers_otherUsers?.length && syncUsers_otherUsers?.map(({ id, name, image, position: [x, y] }) => {
+      {syncUsers_otherUsers && syncUsers_otherUsers?.length && syncUsers_otherUsers?.map(({ id, name, image, pos: [x, y] }) => {
         const translate = `translate(${x}px, ${y}px)`;
         const scale = ``;
         return (

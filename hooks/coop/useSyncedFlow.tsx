@@ -1,113 +1,194 @@
+//useSyncedFlow.tsx
+import { Log } from '@/DB/models/Log';
 import { IUser } from '@/DB/models/User';
-import { applyEdgeChanges, applyNodeChanges, useEdgesState, useNodesState } from '@xyflow/react';
-import { DefaultUser } from 'next-auth';
-import { useEffect, useCallback, useState } from 'react';
+import {
+  applyEdgeChanges,
+  applyNodeChanges,
+  useEdgesState,
+  useNodesState,
+} from '@xyflow/react';
+import { Session } from 'next-auth';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-interface useSyncedFlow {
+interface useSyncedFlowProps {
   isPublicAccess: boolean;
   serverUrl: string;
   room: string;
-  thisUser?: DefaultUser & IUser;
+  session: Session;
 }
 
-interface Users {
-  id: string,
-  name: string,
-  image: string,
-  pos: [number, number],
+interface User {
+  id: string;
+  name: string;
+  image: string;
+  pos: [number, number];
 }
 
-export const useSyncedFlow = ({ thisUser, isPublicAccess = false, room, serverUrl = 'http://localhost:3005' }: useSyncedFlow) => {
-  const [hasRoom, setHasRoom] = useState(false);
+export const useSyncedFlow = ({
+  session = null,
+  isPublicAccess = false,
+  room,
+  serverUrl = 'http://localhost:3005',
+}: useSyncedFlowProps) => {
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
   const [orientation, setOrientation] = useState('TB');
-  const [users, setUsers] = useState<Users[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
-
+  const [users, setUsers] = useState<User[]>([]);
+  const [codeData, setCodeData] = useState([]);
+  const socketRef = useRef<Socket | null>(null);
+  const sessionRef = useRef<Session | null>(session);
+  const [hasRoom, setHasRoom] = useState<boolean>(true);
+  // Обновляем sessionRef при изменении session
   useEffect(() => {
-    if (!isPublicAccess) return;
-    const sock = io(serverUrl);
-    const handleBeforeUnload = () => { sock.emit('reactflow-disconected', thisUser.id, room); };
-    sock.emit('joinRoomReactflow', thisUser, room);
-    sock.on('reactflow', (e) => { if (e) { setNodes(e.nodes); setEdges(e.edges); setOrientation(e.orientation); } });
-    sock.on('reactflow-nodes-changes', (e) => { if (e && thisUser && e.userId != thisUser.id) { setNodes(pre => applyNodeChanges(e.changes, pre)); }; });
-    sock.on('reactflow-edges', (e) => { if (e) setEdges(e); });
-    sock.on('reactflow-orientation', (e) => { if (e) setOrientation(e); });
-    sock.on('reactflow-users', (e) => { if (e) setUsers(e); });
-    setSocket(sock);
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => { window.removeEventListener("beforeunload", handleBeforeUnload); };
-  }, [thisUser, isPublicAccess, room, serverUrl]);
+    sessionRef.current = session;
+  }, [session]);
+
+  const isReady = isPublicAccess && session?.user;
+
+  // Подключение сокета
+  useEffect(() => {
+    if (isReady) {
+      const sock = io(serverUrl);
+      socketRef.current = sock;
+
+      // при закрытии вкладки
+      const handleBeforeUnload = () => {
+        sock.emit('reactflow-disconected', sessionRef.current?.user?.id, room);
+      };
+
+      sock.emit('joinRoomReactflow', sessionRef.current?.user, room);
+
+      // **новый** initial state хендлер
+      sock.on('reactflow', (e) => {
+        if (e) {
+          setHasRoom(e.hasRoom);
+          setNodes(e.nodes);
+          setEdges(e.edges);
+          setOrientation(e.orientation);
+          setCodeData(e.codeData);      // ← добавлено
+          setUsers(e.users);            // ← добавлено
+        }
+      });
+
+      // остальные хендлеры
+      sock.on('reactflow-nodes-changes', (e) => {
+        if (e?.userId !== sessionRef.current?.user?.id) {
+          setNodes((prev) => applyNodeChanges(e.changes, prev));
+        }
+      });
+      sock.on('reactflow-nodes', e => {
+        setNodes(prev => {
+          const newData = e.map((n) => {
+            const old = prev.find((o) => o.id === n.id);
+            return {
+              ...n,
+              selected: old?.selected ?? n.selected,
+              dragging: old?.dragging ?? n.dragging,
+            };
+          });
+          return newData
+        });
+      });
+      sock.on('reactflow-edges', setEdges);
+      sock.on('reactflow-orientation', setOrientation);
+      sock.on('reactflow-users', setUsers);
+      sock.on('reactflow-codedata', setCodeData);
+
+      window.addEventListener('beforeunload', handleBeforeUnload);
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        sock.disconnect();
+      };
+    }
+  }, [isReady, serverUrl, room]);
+
+  const emitIfConnected = (event: string, payload: any) => {
+    const sock = socketRef.current;
+    if (isReady && sock?.connected) {
+      sock.emit(event, payload, room);
+    }
+  };
 
   const updateNodes = useCallback((newValue) => {
-    setNodes((prevNodes) => {
-      const updatedNodes = typeof newValue === 'function' ? newValue(prevNodes) : newValue;
-      // if (isPublicAccess && socket?.connected) {
-      //   socket.emit('reactflow-nodes', updatedNodes, room);
-      // }
-      return updatedNodes;
+    setNodes((prev) => {
+      const updated = typeof newValue === 'function' ? newValue(prev) : newValue;
+      emitIfConnected('reactflow-nodes', updated);
+      return updated;
     });
-  }, [socket, room, isPublicAccess, setNodes]);
+  }, [isReady, room]);
 
   const updateEdges = useCallback((newValue) => {
-    setEdges((prevEdges) => {
-      const updatedEdges = typeof newValue === 'function' ? newValue(prevEdges) : newValue;
-      if (isPublicAccess && socket?.connected) {
-        socket.emit('reactflow-edges', updatedEdges, room);
-      }
-      return updatedEdges;
+    setEdges((prev) => {
+      const updated = typeof newValue === 'function' ? newValue(prev) : newValue;
+      emitIfConnected('reactflow-edges', updated);
+      return updated;
     });
-  }, [socket, room, isPublicAccess, setEdges]);
+  }, [isReady, room]);
 
   const updateOrientation = useCallback((newValue) => {
     setOrientation((prev) => {
-      const updatedEdges = typeof newValue === 'function' ? newValue(prev) : newValue;
-      if (isPublicAccess && socket?.connected) {
-        socket.emit('reactflow-orientation', updatedEdges, room);
-      }
-      return updatedEdges;
+      const updated = typeof newValue === 'function' ? newValue(prev) : newValue;
+      emitIfConnected('reactflow-orientation', updated);
+      return updated;
     });
-  }, [socket, room, isPublicAccess, setOrientation]);
+  }, [isReady, room]);
 
   const onNodesChange = (changes = []) => {
-    const new_changes = changes.filter(e => e.type != 'select');
-
-    setNodes((pre) => {
-      if (isPublicAccess && socket?.connected) {
-        socket.emit('reactflow-nodes-changes', { userId: thisUser.id, changes: new_changes, nodes: applyNodeChanges(new_changes, pre) }, room);
-      }
-      return applyNodeChanges(changes, pre);
+    const filteredChanges = changes.filter((e) => e.type !== 'select');
+    setNodes((prev) => {
+      const updatedNodes = applyNodeChanges(changes, prev);
+      emitIfConnected('reactflow-nodes-changes', {
+        userId: sessionRef.current?.user?.id,
+        changes: filteredChanges,
+      });
+      return updatedNodes;
     });
   };
 
   const onEdgesChange = (changes) => {
-    setEdges((eds) => {
-      const data = applyEdgeChanges(changes, eds);
-      if (isPublicAccess && socket?.connected) socket.emit('reactflow-edges', data, room);
-      return data;
+    setEdges((prev) => {
+      const updated = applyEdgeChanges(changes, prev);
+      emitIfConnected('reactflow-edges', updated);
+      return updated;
     });
   };
 
   const updateUsers = (user, newData) => {
     if (!user) return;
-    const { id, name, image } = user;
-    setUsers(pre => {
-      const exists = pre.some(item => item.id == id);
-      let res = [];
-      if (exists) res = pre.map(item => item.id != id ? item : { ...item, ...newData });
-      else res = [...pre, { id, name, image, ...newData }];
-      if (isPublicAccess && socket?.connected) socket.emit('reactflow-users', res, room);
-      return res
+
+    setUsers(prev => {
+      const exists = prev.some(u => u.id === user.id);
+      // либо обновляем, либо добавляем
+      const merged = exists
+        ? prev.map(u => u.id === user.id ? { ...u, ...newData } : u)
+        : [...prev, { ...user, ...newData }];
+
+      // удаляем дубли по id
+      const deduped = Array.from(
+        new Map(merged.map(u => [u.id, u]))
+          .values()
+      );
+      emitIfConnected('reactflow-users', deduped);
+      return deduped;
     });
   };
 
 
+  const updateCode = useCallback((newValue: any[] | ((prev: any[]) => any[])) => {
+    setCodeData((prev) => {
+      const updated = typeof newValue === 'function' ? newValue(prev) : newValue;
+      emitIfConnected('reactflow-codedata', updated);
+      return updated;
+    });
+  }, [isReady, room]);
+
   return {
+    hasRoom,
+    codeData, setCodeData: updateCode,
     nodes, setNodes: updateNodes, onNodesChange,
     edges, setEdges: updateEdges, onEdgesChange,
-    hasRoom, orientation, setOrientation: updateOrientation,
+    orientation, setOrientation: updateOrientation,
     users, setUsers: updateUsers,
   };
 };

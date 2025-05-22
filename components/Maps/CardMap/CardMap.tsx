@@ -14,12 +14,19 @@ interface ICardMap extends Partial<IMap> {
 }
 
 const CardMap: React.FC<ICardMap> = ({ id, label = '', image = null, isFavourite = false, isPublicAccess = false, updateMapProperty, showModalFormMapOptions }) => {
+
+  const openHref = `${id}`;
+
+  const onCopy = async () => {
+    await navigator.clipboard.writeText(openHref);
+  }
+
   return (
     <Frame
       sx={{ backgroundImage: image ? `url(${image})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}
       className={styles.cardMap}>
       <Box className={clsx(styles.isPublicAccess, isPublicAccess && styles.active)} >
-        {isPublicAccess && <InputText value={`http://localhost:3000/maps/${id}`} label='Ссылка на карту' size='small' endAdornment={<IconButton><Icon icon='copy' /></IconButton>} />}
+        {isPublicAccess && <InputText value={openHref} label='Ссылка на карту' size='small' endAdornment={<IconButton onClick={onCopy}><Icon icon='copy' /></IconButton>} />}
       </Box>
       <div className={styles.cardMap_content}>
         <InputLink href={`/maps/${id}`} sx={{ zIndex: '999' }} color='ui'><Typography variant='body1' overflow='hidden' textOverflow='ellipsis'>{label}</Typography></InputLink>

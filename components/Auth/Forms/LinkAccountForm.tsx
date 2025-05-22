@@ -1,5 +1,6 @@
 'use client'
 import Frame from "@/components/UI/Frame/Frame";
+import LoaderCircular from "@/components/UI/Loader/LoaderCircular";
 import { UserAction } from "@/DB/actions/UserAction";
 import { IUser } from "@/DB/models/User";
 import { decryptDataURI, encryptData } from "@/utils/uid_crypto";
@@ -46,7 +47,7 @@ const LinkAccountForm = () => {
   // }
 
   if (!users || !users.mainUser || !users.linkUser) {
-    return <div>Loading...</div>;
+    return <div><LoaderCircular/></div>;
   }
 
   const handleLinkAccount = async () => {

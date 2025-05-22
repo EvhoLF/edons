@@ -6,9 +6,11 @@ import { Stack, Typography } from '@mui/material';
 import InputText from '@/components/UI/MUI/InputText';
 
 const PNMShape = ({ node }) => {
-  const { id, data } = node;
-  let { label, color, icon, codeType } = node.data;
-  const { updateNodeData } = useRF();
+  const { updateNodeData, getNode } = useRF();
+  const a_node = getNode(node.id);
+  // if (!a_node) return <></>;
+  const { id, data } = a_node || { id: null, data: { label: '', color: '', icon: '', codeType: '' } };
+  const { label, color, icon, codeType } = data;
 
   const handleLabelChange = useCallback(
     (e) => updateNodeData(id, { label: e.target.value }),

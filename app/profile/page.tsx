@@ -7,7 +7,7 @@ export default function Page() {
 
   return (
     <>
-      <Container sx={{ display: 'flex', height: '100vh', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <Container sx={{ display: 'flex', height: '100vh', flexDirection: 'column', justifyContent: 'start', alignItems: 'center' }}>
         <Header unfixed />
         <ProfileForm />
       </Container>

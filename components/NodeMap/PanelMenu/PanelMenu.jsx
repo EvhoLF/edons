@@ -9,7 +9,7 @@ import InputButton from '@/components/UI/MUI/InputButton';
 import { signIn, useSession } from 'next-auth/react';
 import { encryptDataURI } from '@/utils/uid_crypto';
 
-const PanelMenu = ({ saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGitMap = () => { }, githubAccess = false, repos = [] }) => {
+const PanelMenu = ({ isPublicAccess = false, saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGitMap = () => { }, githubAccess = false, repos = [] }) => {
   const { data: session } = useSession();
 
   const GitNode = () => githubAccess && session
@@ -41,7 +41,7 @@ const PanelMenu = ({ saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGi
         <Button onClick={TakeScreenshot} draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Снимок экрана</Typography></Button>
         <Divider />
         <PopoverMenu
-          openButton={({ handleOpen }) => <InputButton fullWidth onClick={handleOpen} draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Импорт GitHub</Typography></InputButton>}
+          openButton={({ handleOpen }) => <InputButton disabled={isPublicAccess} fullWidth onClick={handleOpen} draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Импорт GitHub</Typography></InputButton>}
           sx={{ marginLeft: 2 }}
           stack={{ spacing: 1 }}
         >

@@ -17,8 +17,8 @@ const getInitialData_Code = () => ({
     color: tNodeCode.text.data.color,
     icon: tNodeCode.text.data.icon,
     codeType: tNodeCode.text.data.codeType,
-    codeData: '',
-    isClose: false
+    // codeData: '',
+    // isClose: false
   }
 });
 

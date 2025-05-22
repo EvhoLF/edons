@@ -1,5 +1,6 @@
 'use client'
 import { Icon } from "@/components/UI/Icon/Icon";
+import LoaderCircular from "@/components/UI/Loader/LoaderCircular";
 import InputButton from "@/components/UI/MUI/InputButton";
 import InputText from "@/components/UI/MUI/InputText";
 import { UserAction } from "@/DB/actions/UserAction";
@@ -37,10 +38,6 @@ const ProfileForm = () => {
   const [error, setError] = useState<ValidationError>({});
   const [isChanged, setIsChanged] = useState(true);
 
-
-  console.log(session);
-
-
   useEffect(() => {
     const updateForm = async () => {
       if (!session || !session.user) return;
@@ -58,7 +55,7 @@ const ProfileForm = () => {
     updateForm();
   }, [session])
 
-  if (!session || !session.user) return <div>Loading...</div>
+  if (!session || !session.user) return <div><LoaderCircular sx={{ mt: 4 }} /></div>
 
   const LinkProviders = (provider: 'github' | 'google') => async () => {
     signIn(provider, { callbackUrl: `/auth/link-account?u=${encryptDataURI(session.user.id)}` });
@@ -68,6 +65,7 @@ const ProfileForm = () => {
     const res = await UserAction.update(session.user.id, { [provider]: null });
     if (!res) return;
     await setSession({ ...session, user: { ...session.user, [provider]: null }, lastProvider: null });
+    setForm(prev => ({ ...prev, [provider]: '', }));
   }
 
   const onChange = (field: keyof IUser) => (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
