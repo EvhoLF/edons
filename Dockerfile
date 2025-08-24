@@ -11,6 +11,7 @@ FROM base AS build
 
 RUN npm install
 COPY . .
+COPY .env ./
 
 # Сборка Next.js
 ENV NODE_OPTIONS="--max-old-space-size=2048"
@@ -33,7 +34,6 @@ COPY --from=build /app/.next ./.next
 COPY --from=build /app/public ./public
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/next.config.ts ./
-COPY --from=build /app/.env ./.env
 COPY --from=build /app/ws_server.js ./ws_server.js
 
 # Указываем переменные окружения
