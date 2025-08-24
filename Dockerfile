@@ -12,9 +12,6 @@ FROM base AS build
 RUN npm install
 COPY . .
 
-ARG ENV_PRODUCTION
-RUN echo "$ENV_PRODUCTION" > .env
-
 # Сборка Next.js
 ENV NODE_OPTIONS="--max-old-space-size=2048"
 RUN npm run build

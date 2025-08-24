@@ -23,12 +23,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
           file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/edons:latest
-          build-args: |
-            ENV_PRODUCTION=${{ secrets.KLASTERWEB__ENV }}
       - name: Deploy to server (KLASTERWEB)
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -37,6 +34,6 @@ jobs:
           key: ${{ secrets.KLASTERWEB__SERVER_SSH_KEY }}
           script: |
             cd /var/www/edons_kz_usr/data/
-            docker compose pull        # скачиваем новый образ с Docker Hub
-            docker compose up -d --force-recreate --remove-orphans # пересоздаём контейнер
+            docker compose pull
+            docker compose up -d --force-recreate --remove-orphans
             docker image prune -f
