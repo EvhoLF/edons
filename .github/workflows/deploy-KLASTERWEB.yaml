@@ -2,19 +2,30 @@ name: CI/CD Next.js Docker
 on:
   push:
     branches:
-      - main  # запускать при пуше в main
+      - main # Запускать только при пуше в main
 jobs:
   build-and-deploy-KLASTERWEB:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      # === ЭТАП 1. Клонируем репозиторий ===
+      - name: Checkout repository
         uses: actions/checkout@v3
+      # === ЭТАП 2. Логинимся в Docker Hub ===
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Deploy to server KLASTERWEB
+      # === ЭТАП 3. Собираем Docker-образ ===
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/edons-app:latest .
+      # === ЭТАП 4. Публикуем Docker-образ в Docker Hub ===
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/edons-app:latest
+      # === ЭТАП 5. Деплой на сервер ===
+      - name: Deploy to server (KLASTERWEB)
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.KLASTERWEB__SERVER_HOST }}
@@ -22,5 +33,6 @@ jobs:
           key: ${{ secrets.KLASTERWEB__SERVER_SSH_KEY }}
           script: |
             cd /var/www/edons_kz_usr/data/
-            docker compose pull   # тянем последние образы
-            docker compose up -d --remove-orphans
+            docker compose pull        # скачиваем новый образ с Docker Hub
+            docker compose up -d --force-recreate --remove-orphans # пересоздаём контейнер
+            docker image prune -f
