@@ -22,5 +22,5 @@ jobs:
           key: ${{ secrets.KLASTERWEB__SERVER_SSH_KEY }}
           script: |
             cd /var/www/edons_kz_usr/data/
-            docker-compose pull   # тянем последние образы
-            docker-compose up -d --remove-orphans
+            docker compose pull   # тянем последние образы
+            docker compose up -d --remove-orphans
