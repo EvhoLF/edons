@@ -3,12 +3,19 @@ import { data_fileExtensions } from "@/data/data_fileExtensions";
 const importRegexes = {
   js: /(?:import\s[^'"]*['"]([^'"]*)['"]|require\(['"]([^'"]*)['"]\))/g,
   jsx: /(?:import\s[^'"]*['"]([^'"]*)['"]|require\(['"]([^'"]*)['"]\))/g,
+  ts: /(?:import\s[^'"]*['"]([^'"]*)['"]|require\(['"]([^'"]*)['"]\))/g,
+  tsx: /(?:import\s[^'"]*['"]([^'"]*)['"]|require\(['"]([^'"]*)['"]\))/g,
   html: /<link\s[^>]*href=['"]([^'"]*)['"][^>]*>|<script\s[^>]*src=['"]([^'"]*)['"][^>]*>/g,
   css: /@import\s+(?:url\(['"]?(.*?)['"]?\)|['"](.*?)['"]?);/g,
   php: /(?:include|require)(?:_once)?\s*\(?\s*[\'"]([^\'"]+)[\'"]\s*\)?;/g,
   python: /(?:import\s+(\w+)|from\s+(\w+)\s+import\s+(\w+))/g,
   csharp: /using\s+(\w+(\.\w+)*);/g,
   java: /import\s+(\w+(\.\w+)*);/g,
+
+  sh: /^\s*(?:\.|source)\s+(.+)$/gm,
+  ruby: /^\s*require(?:_relative)? ['"](.+)['"]/gm,
+  go: /^\s*import\s+["'](.+)["']/gm,
+  rust: /^\s*extern\s+crate\s+(\w+);|use\s+([a-zA-Z0-9_:]+);/gm,
 };
 
 const updateImports = (basePath, importPaths) => {

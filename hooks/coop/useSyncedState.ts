@@ -4,11 +4,12 @@ import { io, Socket } from 'socket.io-client'; // Импортируем Socket 
 interface UseSyncedStateOptions<T> {
   initialState: T;
   roomName: string;
-  serverUrl: string;
+  serverUrl?: string;
   enabled?: boolean
+  room?: any,
 }
 
-export function useSyncedState<T>({ initialState, room, serverUrl, enabled = true }: UseSyncedStateOptions<T>) {
+export function useSyncedState<T>({ initialState, room, serverUrl = process.env.NEXT_PUBLIC_SOCKET_URL, enabled = true }: UseSyncedStateOptions<T>) {
   const [state, setState] = useState<T>(initialState);
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -39,7 +40,7 @@ export function useSyncedState<T>({ initialState, room, serverUrl, enabled = tru
       return updatedState;
     });
   }, [socket, room, enabled]);
-  
+
 
   return [state, updateState] as const;
 }

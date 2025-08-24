@@ -48,11 +48,6 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
   const { showModal, closeModal } = useModal();
   const { repos, GitFetchs } = useGithub();
 
-  // const [nodes, setNodes, onNodesChange] = useNodesState();
-  // const [edges, setEdges, onEdgesChange] = useEdgesState();
-  // const [syncNodes, setSyncNodes] = useSyncedState({ initialState: [], roomName: `${mapId}-nodes`, serverUrl: 'http://localhost:3005' });
-  // const [syncEdges, setSyncEdges] = useSyncedState({ initialState: [], roomName: `${mapId}-edges`, serverUrl: 'http://localhost:3005' });
-
   const {
     nodes, setNodes, onNodesChange,
     edges, setEdges, onEdgesChange,
@@ -62,7 +57,6 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
     thisUser: session?.user,
     isPublicAccess,
     room: `${mapId}-nodes-edges`,
-    serverUrl: 'http://localhost:3005',
   });
   const [codeData, setCodeData] = useState([]);
 

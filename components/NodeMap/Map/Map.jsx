@@ -103,7 +103,6 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
     session,
     isPublicAccess,
     room: `${mapId}-nodes-edges`,
-    serverUrl: process.env.NEXT_PUBLIC_WS_URL ?? "http://localhost:3005",
   });
 
 

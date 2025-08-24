@@ -4,7 +4,7 @@ export const tNodeCode = {
   html: { id: 'html', name: 'HTML', data: { color: '#e44d26', icon: 'html', codeType: 'html' } },
   css: { id: 'css', name: 'CSS', data: { color: '#42a5f5', icon: 'css', codeType: 'css' } },
   js: { id: 'js', name: 'JavaScript', data: { color: '#ffca28', icon: 'js', codeType: 'js' } },
-  ts: { id: 'ts', name: 'TypeScript', data: { color: '#3178c6', icon: 'ts', codeType: 'text' } },
+  ts: { id: 'ts', name: 'TypeScript', data: { color: '#3178c6', icon: 'ts', codeType: 'ts' } },
   // web frameworks
   react: { id: 'react', name: 'React', data: { color: '#58C4DC', icon: 'react', codeType: 'js' } },
   react_ts: { id: 'react_ts', name: 'React Ts', data: { color: '#3178c6', icon: 'react', codeType: 'ts' } },
@@ -58,7 +58,7 @@ export const tNodeCode = {
   // media
   audio: { id: 'audio', name: 'Audio', data: { color: '#FE5257', icon: 'audio', codeType: 'text' } },
   video: { id: 'video', name: 'Viedo', data: { color: '#EC4D82', icon: 'video', codeType: 'text' } },
-  images: { id: 'images', name: 'Images', data: { color: '#34B282', icon: 'images', codeType: 'text' } },
+  images: { id: 'images', name: 'Images', data: { color: '#34B282', icon: 'images', codeType: 'images' } },
   font: { id: 'font', name: 'Font', data: { color: '#f63346', icon: 'font', codeType: 'text' } },
   svg: { id: 'svg', name: 'SVG', data: { color: '#ee1e1e', icon: 'svg', codeType: 'text' } },
   zip: { id: 'zip', name: 'Zip', data: { color: '#4CAF50', icon: 'zip', codeType: 'text' } },

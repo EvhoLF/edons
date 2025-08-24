@@ -15,7 +15,7 @@ interface ICardMap extends Partial<IMap> {
 
 const CardMap: React.FC<ICardMap> = ({ id, label = '', image = null, isFavourite = false, isPublicAccess = false, updateMapProperty, showModalFormMapOptions }) => {
 
-  const openHref = `${id}`;
+  const openHref = `http://localhost:3000/maps/${id}`;
 
   const onCopy = async () => {
     await navigator.clipboard.writeText(openHref);

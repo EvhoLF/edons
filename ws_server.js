@@ -1,6 +1,6 @@
 // ws_server.js
-const io = require('socket.io')(3005, {
-  cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] }
+const io = require('socket.io')(8082, {
+  cors: { origin: 'http://localhost:8081', methods: ['GET', 'POST'] }
 });
 
 const rooms = {};
@@ -106,5 +106,15 @@ io.on('connection', socket => {
 
   socket.on('message', (message, room) => {
     if (room) io.to(room).emit('message', message);
+  });
+
+  socket.on('server-stats', () => {
+    const stats = {
+      rooms: Object.keys(rooms).length,
+      users: Object.values(rooms).reduce((sum, r) => sum + r.users.length, 0),
+      memoryMB: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+      uptimeSec: `${process.uptime().toFixed(0)} Sec`,
+    };
+    socket.emit('server-stats', stats);
   });
 });

@@ -36,7 +36,7 @@ const PNMCode = ({ node }) => {
   const handleCodeTypeChange = (e) => { if (e) updateNodeData(id, { codeType: e }); }
 
   const codeTypeOptions = useMemo(
-    () => Object.values(data_codeTypes).map((e) => ({ id: e.type, name: e.name, icon: e.type, color: data_nodeTypesTemplate[e.type] })),
+    () => Object.values(data_codeTypes).map((e) => ({ id: e.type, name: e.name, icon: data_nodeTypesTemplate[e.type].icon, color: data_nodeTypesTemplate[e.type].color })),
     []
   );
 

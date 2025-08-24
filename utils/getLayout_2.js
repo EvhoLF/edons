@@ -4,7 +4,7 @@ const NODE_WIDTH = 400;
 const NODE_HEIGHT = 60;
 const HORIZONTAL_OFFSET = 100;
 const VERTICAL_OFFSET = 100;
-const GRID_COLUMNS = 3;
+const GRID_COLUMNS = 3; // Число столбцов для сетки несвязанных узлов
 
 const calculateNodePosition = (pos, node, isHorizontal, offsetX, offsetY) => {
   return {
@@ -16,20 +16,21 @@ const calculateNodePosition = (pos, node, isHorizontal, offsetX, offsetY) => {
 export const getLayout = (nodes, edges, direction) => {
   const isHorizontal = direction === 'LR';
 
+  // Найдем все связанные и несвязанные узлы
   const connectedNodeIds = new Set(edges.flatMap(edge => [edge.source, edge.target]));
   const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
   const nonConnectedNodes = nodes.filter(node => !connectedNodeIds.has(node.id));
 
+  // Создаем граф для связанных узлов
   const g = new Dagre.graphlib.Graph({ multigraph: true })
     .setDefaultEdgeLabel(() => ({}))
     .setGraph({
       rankdir: direction,
-      nodesep: 30,   // сузил расстояния между узлами
-      edgesep: 15,   // немного больше чтобы линии не пересекались
-      ranksep: 70,
+      nodesep: 50,
+      edgesep: 10,
+      ranksep: 100,
       marginx: 20,
-      marginy: 20,
-      acyclicer: 'greedy',
+      marginy: 20
     });
 
   connectedNodes.forEach(node => {
@@ -40,13 +41,13 @@ export const getLayout = (nodes, edges, direction) => {
   });
 
   edges.forEach(edge => {
-    // Если есть дубли, можно фильтровать заранее, но пока добавим все
     g.setEdge(edge.source, edge.target);
   });
 
+  // Выполняем расчет расположения для связанных узлов
   Dagre.layout(g);
 
-  const layoutNodes = nodes.map(node => {
+  const layoutNodes = nodes.map((node) => {
     if (connectedNodeIds.has(node.id)) {
       const pos = g.node(node.id);
       if (!pos) return null;
@@ -64,7 +65,7 @@ export const getLayout = (nodes, edges, direction) => {
     return null;
   }).filter(Boolean);
 
-  // Размещаем несвязанные узлы ниже (или правее) связанных
+  // Компактное размещение несвязанных узлов в отдельной области
   let nonConnectedIndex = 0;
   const nonConnectedLayoutNodes = nonConnectedNodes.map(node => {
     const column = nonConnectedIndex % GRID_COLUMNS;
@@ -84,6 +85,7 @@ export const getLayout = (nodes, edges, direction) => {
     };
   });
 
+  // Смещаем все несвязанные узлы на отдельный блок
   const xOffset = 0;
   const yOffset = connectedNodes.length ? Math.max(...layoutNodes.map(node => node.position.y + NODE_HEIGHT)) + VERTICAL_OFFSET : 0;
 
@@ -91,6 +93,9 @@ export const getLayout = (nodes, edges, direction) => {
     node.position.x += xOffset;
     node.position.y += yOffset;
   });
+  // console.log(layoutNodes);
+
+  // console.log({ nodes: [...layoutNodes, ...nonConnectedLayoutNodes], edges });
 
   return { nodes: [...layoutNodes, ...nonConnectedLayoutNodes], edges };
 };

@@ -13,7 +13,7 @@ import { io, Socket } from 'socket.io-client';
 
 interface useSyncedFlowProps {
   isPublicAccess: boolean;
-  serverUrl: string;
+  serverUrl?: string;
   room: string;
   session: Session;
 }
@@ -29,7 +29,7 @@ export const useSyncedFlow = ({
   session = null,
   isPublicAccess = false,
   room,
-  serverUrl = 'http://localhost:3005',
+  serverUrl = process.env.NEXT_PUBLIC_SOCKET_URL,
 }: useSyncedFlowProps) => {
   const [nodes, setNodes] = useNodesState([]);
   const [edges, setEdges] = useEdgesState([]);
