@@ -34,7 +34,6 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/next.config.ts ./
 COPY --from=build /app/.env ./.env
-COPY --from=build /app/.env.production ./.env.production
 COPY --from=build /app/ws_server.js ./ws_server.js
 
 # Указываем переменные окружения
