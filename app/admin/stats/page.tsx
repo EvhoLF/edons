@@ -7,6 +7,7 @@ export default function Page() {
   return (
     <>
       <Container maxWidth='xl' sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Typography>CI/CD TEST</Typography>
         <Stats/>
       </Container >
       <BG />
