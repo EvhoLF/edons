@@ -3,6 +3,7 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   // output: 'standalone',
+  compress: false,
   eslint: {
     ignoreDuringBuilds: true,
   },

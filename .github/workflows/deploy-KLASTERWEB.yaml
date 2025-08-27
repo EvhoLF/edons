@@ -50,7 +50,6 @@ jobs:
             rm -r edons.tar
             docker stop edons-app || true
             docker rm edons-app || true
-            docker compose down
-            docker compose up -d --force-recreate --remove-orphans
+            docker compose up -d --force-recreate edons-app
             docker exec edons-app
             docker image prune -f
