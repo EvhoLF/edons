@@ -19,7 +19,7 @@ jobs:
 
       # === ЭТАП 3. Собираем образ ===
       - name: Build Docker image
-        run: docker build -t edons:latest .
+        run: docker build --no-cache -t edons:latest . # run: docker build -t edons:latest .
 
       # === ЭТАП 4. Сохраняем образ в tar ===
       - name: Save Docker image as tar
