@@ -100,7 +100,7 @@ export default function Home() {
         <footer className={styles.footer}>
           <Stack alignItems='center' p={2} mt={10}>
             <Typography>
-              © 2025. All rights reserved - by Chistoedov Maxim
+              © 2025. All rights reserved - Chistoedov Maxim
             </Typography>
           </Stack>
         </footer>
