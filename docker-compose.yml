@@ -1,7 +1,7 @@
 services:
   edons-app:
     build: .
-    image: evholff/edons:latest
+    image: edons:latest
     container_name: edons-app
     ports:
       - "8081:8081"
