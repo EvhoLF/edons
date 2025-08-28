@@ -48,8 +48,5 @@ jobs:
             cd /var/www/edons_kz_usr/data/
             docker load -i edons.tar
             rm -r edons.tar
-            docker stop edons-app || true
-            docker rm edons-app || true
             docker compose -p edons down
-            docker compose up -d --force-recreate --remove-orphans
-            docker image prune -f
+            docker compose -p edons up -d --force-recreate --remove-orphans

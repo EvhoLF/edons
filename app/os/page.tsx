@@ -12,6 +12,7 @@ const page = () => {
     }}
     >
       <Typography variant='h3' textAlign='center'>OUR STORY</Typography>
+      <Typography variant='h5' textAlign='center'>THE GAME</Typography>
       <div style={{
         position: 'relative',
         width: '100%',
