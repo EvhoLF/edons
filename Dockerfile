@@ -40,4 +40,4 @@ ENV NEXT_PORT=8081
 ENV WS_PORT=8082
 
 # Запускаем Next.js и WS параллельно
-CMD ["npm", "run", "start:all"]
+CMD ["sh", "-c", "npm run ws & npm run start"]
