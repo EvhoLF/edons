@@ -1,4 +1,5 @@
 export const tNodeCode = {
+  default: { id: 'default', name: 'Default', data: { color: '#ccccdd', icon: 'text', codeType: 'text' } },
   // main
   text: { id: 'text', name: 'Text', data: { color: '#ccccdd', icon: 'text', codeType: 'text' } },
   html: { id: 'html', name: 'HTML', data: { color: '#e44d26', icon: 'html', codeType: 'html' } },

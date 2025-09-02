@@ -7,6 +7,8 @@ const useGithub = () => {
 
   async function fetchGitHub(endpoint, headers = {}, params = {}) {
     const url_params = new URLSearchParams(params);
+    console.log(`https://api.github.com/${endpoint}?${url_params}`);
+    
     try {
       const response = await fetch(`https://api.github.com/${endpoint}?${url_params}`, {
         headers: { Authorization: `token ${session.github_access_token}`, ...headers },

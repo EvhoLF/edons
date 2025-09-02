@@ -6,6 +6,7 @@ import InputText from '../UI/MUI/InputText';
 import { MapAction } from '@/DB/actions/MapAction';
 import { Types } from 'mongoose';
 import { enqueueSnackbar } from 'notistack';
+import Frame from '../UI/Frame/Frame';
 
 const ModalFormMapCreate = ({ userId = '', setMaps, closeModal }: { userId: string, setMaps: React.Dispatch<React.SetStateAction<IMap[]>>, closeModal: () => void }) => {
   const [error, setError] = useState<null | string>(null);
@@ -25,16 +26,18 @@ const ModalFormMapCreate = ({ userId = '', setMaps, closeModal }: { userId: stri
     }
   };
   return (
-    <Stack p={2} spacing={3}>
-      <Typography variant='h4'>Создание карты</Typography>
-      <InputText error={error !== null && !!error} helperText={error} value={label} onChange={e => setValue(e.target.value)} label='Название карты' placeholder='Название' labelActive />
-      <Stack justifyContent='end' direction='row' spacing={2}>
-        <Button onClick={closeModal} color="error">Отмена</Button>
-        <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
-          Создать
-        </Button>
+    <Frame>
+      <Stack p={2} spacing={3}>
+        <Typography variant='h4'>Создание карты</Typography>
+        <InputText error={error !== null && !!error} helperText={error} value={label} onChange={e => setValue(e.target.value)} label='Название карты' placeholder='Название' labelActive />
+        <Stack justifyContent='end' direction='row' spacing={2}>
+          <Button onClick={closeModal} color="error">Отмена</Button>
+          <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
+            Создать
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
+    </Frame>
   );
 };
 

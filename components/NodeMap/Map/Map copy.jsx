@@ -4,8 +4,8 @@ import { ReactFlow, addEdge, Background, Controls, MiniMap, Panel, ConnectionMod
 import '@xyflow/react/dist/style.css';
 import styles from './Map.module.scss'
 import { getLayout } from "@/utils/getLayout";
-import { ParseFileInNode } from "@/utils/Nodes/ParseFileInNode";
-import { ParseGitInNode } from "@/utils/Nodes/ParseGitInNode";
+import { ParseFileInNode } from "@/utils/ParserFiles/ParseFileInNode";
+import { ParseGitInNode } from "@/utils/ParserFiles/ParseGitInNode";
 import UserPanel from "@/components/Auth/UserPanel/UserPanel";
 import PanelTools from "../PanelTools/PanelTools";
 import PanelMenu from '../PanelMenu/PanelMenu'

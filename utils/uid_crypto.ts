@@ -1,20 +1,11 @@
 import crypto from 'crypto-js';
 
-const SECRET_KEY = 'Z64X6gzY1mj5eKfQQrULjm78OHWSzG5XK6GkC4TWiCv';
+const SECRET_KEY = process.env.CRYPTO_SECRET_KEY;
 
-export const encryptData = (text: string) => {
-  return crypto.AES.encrypt(text, SECRET_KEY).toString();
-}
+export const encryptData = (text: string) => crypto.AES.encrypt(text, SECRET_KEY).toString();
 
-export const decryptData = (cipher: string): string => {
-  const bytes = crypto.AES.decrypt(cipher, SECRET_KEY);
-  return bytes.toString(crypto.enc.Utf8);
-};
+export const decryptData = (cipher: string): string => crypto.AES.decrypt(cipher, SECRET_KEY).toString(crypto.enc.Utf8);
 
-export const encryptDataURI = (text: string) => {
-  return encodeURIComponent(encryptData(text));
-}
+export const encryptDataURI = (text: string) => encodeURIComponent(encryptData(text));
 
-export const decryptDataURI = (cipher: string): string => {
-  return decodeURIComponent(decryptData(cipher));
-};
+export const decryptDataURI = (cipher: string): string => decodeURIComponent(decryptData(cipher));

@@ -1,4 +1,4 @@
-import { Box, Grid2, Stack, Typography } from '@mui/material'
+import { Box, Grid, Stack, Typography } from '@mui/material'
 import React from 'react'
 import Frame from '../Frame/Frame'
 import InputText from '../MUI/InputText'
@@ -14,8 +14,8 @@ const ContactForm = () => {
         <Typography textAlign='center'>Мы стараемся ответить как можно скорее, обычно в течение пары дней</Typography>
       </Stack>
       <Frame p={2}>
-        <Grid2 container spacing={5}>
-          <Grid2 size={{ xs: 12, md: 6 }}>
+        <Grid container spacing={5}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Box p={3}>
               <Stack spacing={3}>
                 <InputText label='Ваш Email' />
@@ -23,8 +23,8 @@ const ContactForm = () => {
                 <InputButton variant='contained_alt'>Отправить</InputButton>
               </Stack>
             </Box>
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Stack spacing={2} p={2} height={'100%'} justifyContent='space-between'>
               <Stack spacing={3}>
                 <Typography textAlign='center' variant='h5' fontWeight='300'>Вы также можете найти нас на...</Typography>
@@ -34,8 +34,8 @@ const ContactForm = () => {
               </Stack>
               <Typography textAlign='center' variant='body1' fontWeight='300'>... или написать на edons.maps@gmail.com</Typography>
             </Stack>
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       </Frame>
     </Stack>
   )

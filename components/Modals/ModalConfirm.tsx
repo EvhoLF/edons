@@ -1,4 +1,5 @@
 import { Button, Stack, Typography } from '@mui/material';
+import Frame from '../UI/Frame/Frame';
 
 const ModalConfirm = (
   { title = 'Подтверждение действия',
@@ -12,14 +13,16 @@ const ModalConfirm = (
   }) => {
 
   return (
-    <Stack p={2} spacing={3}>
-      <Typography variant='h4'>{title} </Typography>
-      <Typography>{text}</Typography>
-      <Stack justifyContent='space-between' direction='row' spacing={2}>
-        <Button onClick={closeModal} color='primary'>Отмена</Button>
-        <Button onClick={onConfirm} color='primary'>Подтвердить</Button>
-      </Stack>
-    </Stack >
+    <Frame>
+      <Stack p={2} spacing={3}>
+        <Typography variant='h4'>{title} </Typography>
+        <Typography>{text}</Typography>
+        <Stack justifyContent='space-between' direction='row' spacing={2}>
+          <Button onClick={closeModal} color='primary'>Отмена</Button>
+          <Button onClick={onConfirm} color='primary'>Подтвердить</Button>
+        </Stack>
+      </Stack >
+    </Frame>
   );
 };
 export default ModalConfirm;

@@ -2,7 +2,7 @@ import clsx from "clsx";
 import styles from "./page.module.scss";
 import Head from "next/head";
 import BG from "@/components/UI/BG/BG";
-import { Box, Button, Container, Grid, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import Header from "@/components/Header/Header";
 import Frame from "@/components/UI/Frame/Frame";
 import ContactForm from "@/components/UI/ContactForm/ContactForm";
@@ -19,8 +19,8 @@ export default function Home() {
       <Container maxWidth='lg' >
         <main className={styles.main}>
           <section className={clsx(styles.section, styles.sectionFull, styles.center)}>
-            <Grid2 container>
-              <Grid2 size={{ xs: 12, md: 6 }}>
+            <Grid container>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Stack spacing={3}>
                   <Typography variant='h3'>EDONs Визуализация, анализ, оптимизация кода</Typography>
                   <Typography variant='body1'>Разбирайтесь в коде быстрее. Автоматический анализ, визуализация зависимостей, рекомендации по улучшению и совместная работа — всё в одном месте</Typography>
@@ -29,13 +29,13 @@ export default function Home() {
                     <Button href='/documentation' size='large' variant='outlined'>Узнать подробнее</Button>
                   </Stack>
                 </Stack>
-              </Grid2>
-              <Grid2 size={{ xs: 12, md: 6 }}>
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Box sx={{ position: 'relative', width: '100%', height: 300 }}>
                   <Image style={{ objectFit: 'contain' }} fill alt='' src='/ui/s1.png' />
                 </Box>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </section>
 
           <div className={styles.sections}>
@@ -48,40 +48,40 @@ export default function Home() {
               </Stack>
             </section>
             <section>
-              <Grid2 container spacing={2}>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <Frame>
                     <Stack height='200px' justifyContent='end' p={2}>
                       <Typography variant='h4'>Визуализация</Typography>
                       <Typography>Интерактивная карта зависимостей</Typography>
                     </Stack>
                   </Frame>
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 4 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Frame>
                     <Stack height='200px' justifyContent='end' p={2}>
                       <Typography variant='h4'>Анализ кода</Typography>
                       <Typography>Парсинг репозиториев GitHub</Typography>
                     </Stack>
                   </Frame>
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 4 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
                   <Frame>
                     <Stack height='200px' justifyContent='end' p={2}>
                       <Typography variant='h4'>Экспорт</Typography>
                       <Typography>Сохранение схемы в PNG и прочие форматы</Typography>
                     </Stack>
                   </Frame>
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 8 }}>
+                </Grid>
+                <Grid size={{ xs: 12, md: 8 }}>
                   <Frame>
                     <Stack height='200px' justifyContent='end' p={2}>
                       <Typography variant='h4'>Совместная работа</Typography>
                       <Typography>Редактирование в реальном времени, отслеживание действий коллег</Typography>
                     </Stack>
                   </Frame>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </section>
 
             <section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, CircularProgress, Container, Grid2, Stack, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { AnalyticsActions } from "@/DB/actions/AnalyticsAction";
 import StatsCards from "./Analytics/StatsCards";
@@ -64,20 +64,20 @@ const BoardMain = () => {
         </Typography>
         {/* Основные статистические карточки */}
         <StatsCards stats={stats.generalStats} />
-        <Grid2 container spacing={4} sx={{ mt: 2 }}>
+        <Grid container spacing={4} sx={{ mt: 2 }}>
           {/* График активности пользователей */}
-          <Grid2 size={{ xs: 12, md: 6 }}><ActivityChart data={stats.userActivityStats} /></Grid2>
+          <Grid size={{ xs: 12, md: 6 }}><ActivityChart data={stats.userActivityStats} /></Grid>
           {/* График роста пользователей */}
-          <Grid2 size={{ xs: 12, md: 6 }}><UserGrowthChart data={stats.userGrowthStats} /></Grid2>
+          <Grid size={{ xs: 12, md: 6 }}><UserGrowthChart data={stats.userGrowthStats} /></Grid>
           {/* Статистика по картам */}
-          <Grid2 size={{ xs: 12, md: 6 }}><MapStatsChart data={stats.mapStats} /></Grid2>
+          <Grid size={{ xs: 12, md: 6 }}><MapStatsChart data={stats.mapStats} /></Grid>
           {/* Распределение провайдеров аутентификации */}
-          <Grid2 size={{ xs: 12, md: 6 }}><AuthProviderPieChart data={stats.authProviderStats} /></Grid2>
+          <Grid size={{ xs: 12, md: 6 }}><AuthProviderPieChart data={stats.authProviderStats} /></Grid>
           {/* Статистика по картам пользователя */}
-          {/* <Grid2 size={{ xs: 12, md: 6 }}><UserMapStats data={stats.userMapStats} /></Grid2> */}
+          {/* <Grid size={{ xs: 12, md: 6 }}><UserMapStats data={stats.userMapStats} /></Grid> */}
           {/* Таблица ошибок */}
-          {/* <Grid2 size={{ xs: 12, md: 6 }}><ErrorLogsTable data={stats.errorLogs} /></Grid2> */}
-        </Grid2>
+          {/* <Grid size={{ xs: 12, md: 6 }}><ErrorLogsTable data={stats.errorLogs} /></Grid> */}
+        </Grid>
       </Stack>
     </Container >
   );

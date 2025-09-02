@@ -7,6 +7,7 @@ import { Icon } from '../UI/Icon/Icon';
 import { enqueueSnackbar } from 'notistack';
 import { useModal } from '@/hooks/useModal';
 import ModalConfirm from './ModalConfirm';
+import Frame from '../UI/Frame/Frame';
 
 const ModalFormMapOptions = ({ idMap = '', data, setMaps, closeModal }: { idMap: string, data: IMap, setMaps: React.Dispatch<React.SetStateAction<IMap[]>>, closeModal: () => void }) => {
   const [error, setError] = useState<null | string>(null);
@@ -58,26 +59,28 @@ const ModalFormMapOptions = ({ idMap = '', data, setMaps, closeModal }: { idMap:
 
 
   return (
-    <Stack p={2} spacing={3}>
-      <Typography variant='h4'>Настройка карты</Typography>
-      <InputText error={error !== null && !!error} helperText={error} value={map.label} onChange={onChangeLabel} label='Название карты' placeholder='Название' labelActive />
-      <Stack>
-        <FormControlLabel control={<Switch checked={map?.isFavourite} onChange={onToggleField('isFavourite')} />} label='Избранная карта' />
-        <Tooltip title={'После активации карта будет доступна всем пользователям по ссылке'}>
-          <FormControlLabel control={<Switch checked={map?.isPublicAccess} onChange={onToggleField('isPublicAccess')} />} label="Открытый доступ" />
-        </Tooltip>
-      </Stack>
-      <InputText disabled={!map.isPublicAccess} value={`http://localhost:3000/map/${map.id}`} label='Ссылка на карту' size='small' endAdornment={<IconButton disabled={!map.isPublicAccess}><Icon icon='copy' /></IconButton>} />
-      <Stack justifyContent='space-between' direction='row' spacing={2}>
-        <Button onClick={deleteHandler} color='error'>Удалить</Button>
-        <Stack direction='row' spacing={2}>
-          <Button onClick={closeModal} color='primary'>Отмена</Button>
-          <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
-            Сохранить
-          </Button>
+    <Frame>
+      <Stack p={2} spacing={3}>
+        <Typography variant='h4'>Настройка карты</Typography>
+        <InputText error={error !== null && !!error} helperText={error} value={map.label} onChange={onChangeLabel} label='Название карты' placeholder='Название' labelActive />
+        <Stack>
+          <FormControlLabel control={<Switch checked={map?.isFavourite} onChange={onToggleField('isFavourite')} />} label='Избранная карта' />
+          <Tooltip title={'После активации карта будет доступна всем пользователям по ссылке'}>
+            <FormControlLabel control={<Switch checked={map?.isPublicAccess} onChange={onToggleField('isPublicAccess')} />} label="Открытый доступ" />
+          </Tooltip>
+        </Stack>
+        <InputText disabled={!map.isPublicAccess} value={`http://localhost:3000/map/${map.id}`} label='Ссылка на карту' size='small' endAdornment={<IconButton disabled={!map.isPublicAccess}><Icon icon='copy' /></IconButton>} />
+        <Stack justifyContent='space-between' direction='row' spacing={2}>
+          <Button onClick={deleteHandler} color='error'>Удалить</Button>
+          <Stack direction='row' spacing={2}>
+            <Button onClick={closeModal} color='primary'>Отмена</Button>
+            <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
+              Сохранить
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
-    </Stack>
+    </Frame>
   );
 };
 

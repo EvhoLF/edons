@@ -8,7 +8,7 @@ import { data_nodeTypesTemplate } from '@/data/data_nodeTypesTemplate';
 import { icons_names } from '@/data/data_icons';
 import Frame from '@/components/UI/Frame/Frame';
 import useRF from '@/hooks/useRF';
-import { Autocomplete, MenuItem, Stack, TextField, InputAdornment, Grid2, Typography } from '@mui/material';
+import { Autocomplete, MenuItem, Stack, TextField, InputAdornment, Grid, Typography } from '@mui/material';
 import DropdownSearchMenu from '@/components/UI/MUI/DropdownSearchMenu';
 
 const PNMCode = ({ node }) => {
@@ -66,13 +66,13 @@ const PNMCode = ({ node }) => {
 
         <InputText value={label} onChange={handleLabelChange} size='small' startIcon='title' placeholder='Label' />
 
-        <Grid2 container spacing={1}>
-          <Grid2 item size={9}>
+        <Grid container spacing={1}>
+          <Grid item size={9}>
             <InputText value={color} onChange={handleColorChange} size='small' placeholder='Color: #------'
               startAdornment={<InputColor color={color} onChange={(e) => updateNodeData(id, { color: e })} />}
             />
-          </Grid2>
-          <Grid2 item size={3}>
+          </Grid>
+          <Grid item size={3}>
             <DropdownSearchMenu
               value={icon}
               onChange={(id) => handleIconChange(id)}
@@ -80,8 +80,8 @@ const PNMCode = ({ node }) => {
               getLabel={(item) => item.name}
               getIcon={(item) => item.icon}
             />
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
 
         <DropdownSearchMenu
           value={codeType}

@@ -1,7 +1,7 @@
 'use client';
 // import { data_nodeTypesTemplate } from "@/data/data_nodeTypesTemplate";
 // import { readFileAsText } from "../readFileAsText";
-import { getExtensionId, getFileExtension, getImports } from "../getFileData";
+import { getExtensionId, getFileExtension, getImports } from "./getFileData";
 import { tNodeCode } from "@/data/NodeTemplates/tNodeCode";
 
 function createEdges(files = []) {

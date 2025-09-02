@@ -1,5 +1,5 @@
 import { Icon } from '@/components/UI/Icon/Icon';
-import { Card, CardContent, Grid2, Typography, Box } from '@mui/material';
+import { Card, CardContent, Grid, Typography, Box } from '@mui/material';
 
 export default function StatsCards({ stats }) {
   if (!stats) return null;
@@ -32,9 +32,9 @@ export default function StatsCards({ stats }) {
   ];
 
   return (
-    <Grid2 container spacing={3}>
+    <Grid container spacing={3}>
       {cards.map((card, index) => (
-        <Grid2 size={{ xs: 16, sm: 6, lg: 3 }} key={index}>
+        <Grid size={{ xs: 16, sm: 6, lg: 3 }} key={index}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
               <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -50,9 +50,9 @@ export default function StatsCards({ stats }) {
               </Box>
             </CardContent>
           </Card>
-        </Grid2>
+        </Grid>
       ))
       }
-    </Grid2 >
+    </Grid >
   );
 }

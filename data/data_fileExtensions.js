@@ -1,5 +1,4 @@
-export const data_fileExtensions = {
-  // main
+export const data_fileExtensions = {  // main
   html: { id: 'html', types: ['html', 'htm'] },
   css: { id: 'css', types: ['css'] },
   js: { id: 'js', types: ['js'] },

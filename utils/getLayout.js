@@ -5,6 +5,8 @@ const NODE_HEIGHT = 60;
 const HORIZONTAL_OFFSET = 100;
 const VERTICAL_OFFSET = 100;
 const GRID_COLUMNS = 3;
+const GAP_X = 140; // желаемый отступ по горизонтали (между колонками)
+const GAP_Y = 80;  // желаемый отступ по вертикали (между узлами в колонке)
 
 const calculateNodePosition = (pos, node, isHorizontal, offsetX, offsetY) => {
   return {
@@ -20,16 +22,21 @@ export const getLayout = (nodes, edges, direction) => {
   const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
   const nonConnectedNodes = nodes.filter(node => !connectedNodeIds.has(node.id));
 
+  const { nodesep, ranksep } = isHorizontal
+    ? { nodesep: GAP_Y, ranksep: GAP_X } // LR/RL
+    : { nodesep: GAP_X, ranksep: GAP_Y }; // TB/BT
+
   const g = new Dagre.graphlib.Graph({ multigraph: true })
     .setDefaultEdgeLabel(() => ({}))
     .setGraph({
       rankdir: direction,
-      nodesep: 30,   // сузил расстояния между узлами
-      edgesep: 15,   // немного больше чтобы линии не пересекались
-      ranksep: 70,
+      nodesep,
+      ranksep,
+      edgesep: 15,
       marginx: 20,
       marginy: 20,
       acyclicer: 'greedy',
+      ranker: 'tight-tree', // добавил
     });
 
   connectedNodes.forEach(node => {

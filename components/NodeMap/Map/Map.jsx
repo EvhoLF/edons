@@ -25,8 +25,8 @@ import "@xyflow/react/dist/style.css";
 import throttle from "lodash.throttle";
 import styles from "./Map.module.scss";
 import { getLayout } from "@/utils/getLayout";
-import { ParseFileInNode } from "@/utils/Nodes/ParseFileInNode";
-import { ParseGitInNode } from "@/utils/Nodes/ParseGitInNode";
+import { ParseFileInNode } from "@/utils/ParserFiles/ParseFileInNode";
+import { ParseGitInNode } from "@/utils/ParserFiles/ParseGitInNode";
 import UserPanel from "@/components/Auth/UserPanel/UserPanel";
 import PanelTools from "../PanelTools/PanelTools";
 import PanelMenu from "../PanelMenu/PanelMenu";
@@ -55,6 +55,7 @@ import Cursors from "@/hooks/coop/Cursors";
 import { useSyncedFlow } from "@/hooks/coop/useSyncedFlow";
 import { CodeDataAction } from "@/DB/actions/CodeDataAction";
 import HelperLines from "../HelperLines/HelperLines";
+import ModalImportFiles from "@/components/Modals/ModalImportFiles";
 
 export const NodesContext = createContext({});
 
@@ -168,29 +169,57 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
 
   const onNodesChange = useCallback(
     (changes) => {
-      // 1) применяем ВСЕ изменения – selected/position обновляются мгновенно
       setNodes((ns) => applyNodeChanges(changes, ns));
-      // 2) по сети шлём ТОЛЬКО важные изменения (без select) и с throttling
       const toEmit = changes.filter((c) => c.type !== "select");
       if (toEmit.length) throttledNodesChange(toEmit);
-      // 3) helper‑линии активны при зажатом Shift
-      if (isShiftPressed) {
-        setNodes((ns) => helperLinesNodeChange(changes, ns));
-      } else {
-        helperLinesNodeChange([], []);
-      }
+      if (isShiftPressed) { setNodes((ns) => helperLinesNodeChange(changes, ns)); }
+      else { helperLinesNodeChange([], []); }
     },
     [isShiftPressed, throttledNodesChange, helperLinesNodeChange, setNodes]
   );
 
-  // ==========================================================
-  // Файлы → узлы / GitHub import
-  // ==========================================================
-  const NodeAddFromFiles = useCallback(async (files) => {
-    const { newNodes, newEdges } = await ParseFileInNode(files);
-    setNodes((ns) => [...ns, ...newNodes]);
-    setEdges((es) => [...es, ...newEdges]);
-  }, []);
+  const LoadFromFileMap = useCallback(
+    () => {
+      showModal({
+        size: null,
+        content: (
+          <ModalImportFiles
+            onConfirm={async (files, clearMode) => {
+              try {
+                setLoading("Импорт из файла...");
+                const { newNodes, newEdges, newCodeData } = await ParseFileInNode(files);
+                const layouted = getLayout(newNodes, newEdges, "LR");
+                if (clearMode) {
+                  // Полная замена
+                  setCodeData(newCodeData);
+                  setNodes(layouted.nodes);
+                  setEdges(layouted.edges);
+                } else {
+                  // Добавление к существующим
+                  setCodeData(prev => ({ ...prev, ...newCodeData }));
+                  setNodes(prev => [...prev, ...layouted.nodes]);
+                  setEdges(prev => [...prev, ...layouted.edges]);
+                }
+                requestAnimationFrame(fitView);
+                setOrientation("LR");
+                closeModal();
+              }
+              finally {
+                setLoading("");
+              }
+            }}
+            closeModal={closeModal}
+            // acceptedFileTypes=".csv,.xlsx,.xls,.txt"
+            // maxFileSize={5 * 1024 * 1024} // 5MB
+            // isLoading={isLoading}
+            title="Импорт данных"
+            description="Перетащите файлы или выберите"
+          />
+        ),
+      });
+    },
+    [closeModal, fitView, setEdges, setNodes, setOrientation, showModal]
+  );
 
   const LoadFromGitMap = useCallback(
     (repo) => {
@@ -370,7 +399,7 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
               <Stack direction='row' height='100%' spacing={2}>
                 <PanelCode selectedNode={selectedNode} codeData={codeData} setCodeData={setCodeData} />
                 <Stack spacing={2}>
-                  <PanelMenu isPublicAccess={isPublicAccess} saveMap={saveMap} TakeScreenshot={takeScreenshot} LoadFromGitMap={LoadFromGitMap} githubAccess={session?.github_access_token} repos={repos} />
+                  <PanelMenu isPublicAccess={isPublicAccess} saveMap={saveMap} TakeScreenshot={takeScreenshot} LoadFromGitMap={LoadFromGitMap} LoadFromFileMap={LoadFromFileMap} githubAccess={session?.github_access_token} repos={repos} />
                   <Frame sx={{ width: 'fit-content' }} p={.5}>
                     <IconButton onClick={saveMap} color='primary'><Icon icon='save' color='ui' /></IconButton>
                   </Frame>

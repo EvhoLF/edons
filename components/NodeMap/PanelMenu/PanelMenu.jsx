@@ -9,7 +9,7 @@ import InputButton from '@/components/UI/MUI/InputButton';
 import { signIn, useSession } from 'next-auth/react';
 import { encryptDataURI } from '@/utils/uid_crypto';
 
-const PanelMenu = ({ isPublicAccess = false, saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGitMap = () => { }, githubAccess = false, repos = [] }) => {
+const PanelMenu = ({ isPublicAccess = false, saveMap = () => { }, TakeScreenshot = () => { }, LoadFromGitMap = () => { }, LoadFromFileMap = () => { }, githubAccess = false, repos = [] }) => {
   const { data: session } = useSession();
 
   const GitNode = () => githubAccess && session
@@ -49,6 +49,17 @@ const PanelMenu = ({ isPublicAccess = false, saveMap = () => { }, TakeScreenshot
             <GitNode />
           </Stack>
         </PopoverMenu>
+        {/* <PopoverMenu
+          openButton={({ handleOpen }) => <InputButton disabled={isPublicAccess} fullWidth onClick={handleOpen} draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Импорт GitHub</Typography></InputButton>}
+          sx={{ marginLeft: 2 }}
+          stack={{ spacing: 1 }}
+        >
+          <Stack maxHeight='300px'>
+            <GitNode />
+          </Stack>
+        </PopoverMenu> */}
+
+        <InputButton onClick={LoadFromFileMap} draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Импорт из файла</Typography></InputButton>
         {/* <NextLinkButton href='/' draggable="false" variant='text'><Typography fontSize='.8rem' textAlign='center' color='ui'>Экспорт</Typography></NextLinkButton> */}
       </PopoverMenu>
     </Frame >

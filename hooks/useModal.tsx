@@ -1,13 +1,14 @@
 'use client'
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Modal, Box, Typography } from '@mui/material';
+import { Modal, Box, Typography, SxProps } from '@mui/material';
 import Frame from '@/components/UI/Frame/Frame';
 
-// Определяем типы для модального окна
 interface ModalOptions {
   title?: string;
   content?: ReactNode;
   actions?: ReactNode;
+  size?: number | null; // если null — не задаем width
+  sx?: SxProps; // дополнительные стили
 }
 
 interface ModalContextType {
@@ -15,10 +16,8 @@ interface ModalContextType {
   closeModal: () => void;
 }
 
-// Создаем контекст
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-// Хук для использования модального контекста
 export const useModal = (): ModalContextType => {
   const context = useContext(ModalContext);
   if (!context) {
@@ -27,16 +26,13 @@ export const useModal = (): ModalContextType => {
   return context;
 };
 
-// Провайдер с поддержкой стека модальных окон
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [modalStack, setModalStack] = useState<ModalOptions[]>([]);
 
-  // Функция для отображения нового модального окна (добавляем в стек)
   const showModal = (options: ModalOptions) => {
     setModalStack((prev) => [...prev, options]);
   };
 
-  // Функция для закрытия текущего модального окна (удаляем верхний элемент из стека)
   const closeModal = () => {
     setModalStack((prev) => prev.slice(0, -1));
   };
@@ -47,21 +43,24 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     <ModalContext.Provider value={{ showModal, closeModal }}>
       {children}
 
-      {/* Отображаем только верхнее модальное окно в стеке */}
-      <Modal open={!!currentModal} onClose={closeModal}>
-        <Frame
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-          }}
-        >
-          {currentModal?.title && <Typography variant="h6">{currentModal.title}</Typography>}
-          {currentModal?.content}
-          {currentModal?.actions && <Box>{currentModal.actions}</Box>}
-        </Frame>
+      <Modal open={currentModal != null} onClose={closeModal}>
+        {currentModal ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              maxHeight: '90vh',
+              width: currentModal.size == null ? null : 400, // если size не передан, ставим 400
+              ...currentModal.sx,
+            }}
+          >
+            {currentModal.title && <Typography variant="h6">{currentModal.title}</Typography>}
+            {currentModal.content}
+            {currentModal.actions && <Box>{currentModal.actions}</Box>}
+          </Box>
+        ) : <Box />}
       </Modal>
     </ModalContext.Provider>
   );

@@ -4,7 +4,7 @@ import LoaderCircular from "@/components/UI/Loader/LoaderCircular";
 import { UserAction } from "@/DB/actions/UserAction";
 import { IUser } from "@/DB/models/User";
 import { decryptDataURI, encryptData } from "@/utils/uid_crypto";
-import { Avatar, Box, Button, Grid2, Stack, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
 import { getToken } from "next-auth/jwt";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -83,8 +83,8 @@ const LinkAccountForm = () => {
     <Box sx={{ width: '800px' }} >
       <Frame>
         <Stack spacing={2}>
-          <Grid2 container columns={2} spacing={2}>
-            <Grid2 size={1}>
+          <Grid container columns={2} spacing={2}>
+            <Grid size={1}>
               <Stack alignItems='center'>
                 <Avatar sx={{ width: 75, height: 75 }} alt={users.mainUser?.name || ''} src={users.mainUser?.image} />
                 <Typography variant="h6" gutterBottom textAlign='center'>
@@ -94,8 +94,8 @@ const LinkAccountForm = () => {
                   {users.mainUser?.email}
                 </Typography>
               </Stack>
-            </Grid2>
-            <Grid2 size={1} alignItems='center'>
+            </Grid>
+            <Grid size={1} alignItems='center'>
               <Stack alignItems='center'>
                 <Avatar sx={{ width: 75, height: 75 }} alt={users.linkUser?.name || ''} src={users.linkUser?.image} />
                 <Typography variant='h6' gutterBottom textAlign='center'>
@@ -105,8 +105,8 @@ const LinkAccountForm = () => {
                   {users.linkUser?.email}
                 </Typography>
               </Stack>
-            </Grid2>
-          </Grid2>
+            </Grid>
+          </Grid>
           <Stack direction='row' spacing={2}>
             <Button type='submit' variant='outlined' size='large' fullWidth>Отмена</Button>
             <Button onClick={handleLinkAccount} type='submit' variant='contained' size='large' fullWidth>Связать</Button>
