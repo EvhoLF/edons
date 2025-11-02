@@ -32,7 +32,7 @@ const ModalFormMapCreate = ({ userId = '', setMaps, closeModal }: { userId: stri
         <InputText error={error !== null && !!error} helperText={error} value={label} onChange={e => setValue(e.target.value)} label='Название карты' placeholder='Название' labelActive />
         <Stack justifyContent='end' direction='row' spacing={2}>
           <Button onClick={closeModal} color="error">Отмена</Button>
-          <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
+          <Button onClick={() => { handler(); }} color="primary" variant="contained">
             Создать
           </Button>
         </Stack>

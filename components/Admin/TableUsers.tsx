@@ -40,7 +40,6 @@ export default function TableUsers() {
     let new_errors = null
 
     const findUser = await UserAction.getByLogin(newData.authLogin);
-    console.log(findUser);
 
     if (!findUser) {
       enqueueSnackbar('Этот логин уже занят', { variant: 'error', });

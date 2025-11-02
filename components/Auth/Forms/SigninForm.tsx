@@ -98,7 +98,7 @@ const SigninForm = () => {
           </Stack>
           <Stack direction="row" width="100%" spacing={2}>
             <AuthButton provider="github" callbackUrl={callbackUrl} />
-            <AuthButton provider="google" callbackUrl={callbackUrl} />
+            {/* <AuthButton provider="google" callbackUrl={callbackUrl} /> */}
           </Stack>
         </Stack>
       </Frame>

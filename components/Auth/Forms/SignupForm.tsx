@@ -76,7 +76,7 @@ const SignupForm = () => {
           <Divider>ИЛИ</Divider>
           <Stack direction="row" width='100%' spacing={2}>
             <AuthButton provider='github' />
-            <AuthButton provider='google' />
+            {/* <AuthButton provider='google' /> */}
           </Stack>
         </Stack>
       </Frame >

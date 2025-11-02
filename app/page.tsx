@@ -32,7 +32,7 @@ export default function Home() {
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <Box sx={{ position: 'relative', width: '100%', height: 300 }}>
-                  <Image style={{ objectFit: 'contain' }} fill alt='' src='/ui/s1.png' />
+                  <Image style={{ objectFit: 'contain' }} fill alt='' src='/ui/S1.png' />
                 </Box>
               </Grid>
             </Grid>

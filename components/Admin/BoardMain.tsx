@@ -36,8 +36,6 @@ const BoardMain = () => {
             AnalyticsActions.getUserGrowthStats(),
             // AnalyticsActions.getUserMapStats('67c9caae1a01dc6b451a2984') // Пример ID пользователя
           ]);
-        console.log({ generalStats, userActivityStats, userGrowthStats, mapStats, authProviderStats, });
-
         setStats({ generalStats, userActivityStats, userGrowthStats, mapStats, authProviderStats, });
       }
       catch (error) { console.error('Error fetching admin stats:', error); }

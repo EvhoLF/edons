@@ -74,7 +74,7 @@ const ModalFormMapOptions = ({ idMap = '', data, setMaps, closeModal }: { idMap:
           <Button onClick={deleteHandler} color='error'>Удалить</Button>
           <Stack direction='row' spacing={2}>
             <Button onClick={closeModal} color='primary'>Отмена</Button>
-            <Button onClick={() => { handler(); console.log('Форма отправлена!'); }} color="primary" variant="contained">
+            <Button onClick={() => { handler(); }} color="primary" variant="contained">
               Сохранить
             </Button>
           </Stack>

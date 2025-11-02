@@ -156,8 +156,6 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
         subType: dnd.data?.subType,
         data_main: { position: pos },
       });
-      console.log({ newNode });
-
       setNodes((ns) => [...ns, newNode]);
       setCodeData((ns) => [...ns, { id: newNode.id, data: '' }]);
     },
@@ -221,6 +219,49 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
     [closeModal, fitView, setEdges, setNodes, setOrientation, showModal]
   );
 
+  const GitLoadRepo = useCallback(async (repo) => {
+    closeModal();
+    setLoading("Импорт из GitHub…");
+    try {
+      let tree;
+
+      // Если это репозиторий из модалки импорта (имеет owner и name)
+      if (repo.owner && repo.name) {
+        tree = await GitFetchs.RepoTreeContentAny(repo.owner.login || repo.owner, repo.name, repo.default_branch);
+      }
+      // Если это репозиторий из списка пользователя (имеет full_name)
+      else if (repo.full_name) {
+        const [owner, repoName] = repo.full_name.split('/');
+        tree = await GitFetchs.RepoTreeContentAny(owner, repoName, repo.default_branch);
+      }
+      // Если это строка с полным именем репозитория
+      else if (typeof repo === 'string') {
+        const [owner, repoName] = repo.split('/');
+        tree = await GitFetchs.RepoTreeContentAny(owner, repoName, 'main');
+      }
+      else {
+        throw new Error('Неверный формат данных репозитория');
+      }
+
+      const { newNodes, newEdges, newCodeData } = await ParseGitInNode(tree);
+
+      const layouted = getLayout(newNodes, newEdges, "LR");
+      setCodeData(newCodeData);
+      setNodes(layouted.nodes);
+      setEdges(layouted.edges);
+      requestAnimationFrame(fitView);
+      setOrientation("LR");
+
+      enqueueSnackbar("Репозиторий успешно загружен", { variant: "success" });
+
+    } catch (error) {
+      console.error('Error in GitHub import:', error);
+      enqueueSnackbar('Ошибка при импорте репозитория: ' + error.message, { variant: "error" });
+    } finally {
+      setLoading("");
+    }
+  }, [GitFetchs, closeModal, fitView, setEdges, setNodes, setOrientation, setCodeData]);
+
   const LoadFromGitMap = useCallback(
     (repo) => {
       showModal({
@@ -228,25 +269,7 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
           <ModalConfirm
             title="Загрузка репозитория"
             text="Вы уверены, что хотите загрузить репозиторий?"
-            onConfirm={async () => {
-              closeModal();
-              setLoading("Импорт из GitHub…");
-              try {
-                const tree = await GitFetchs.RepoTreeContent(
-                  repo.full_name,
-                  repo.default_branch
-                );
-                const { newNodes, newEdges, newCodeData } = await ParseGitInNode(tree);
-                const layouted = getLayout(newNodes, newEdges, "LR");
-                setCodeData(newCodeData);
-                setNodes(layouted.nodes);
-                setEdges(layouted.edges);
-                requestAnimationFrame(fitView);
-                setOrientation("LR");
-              } finally {
-                setLoading("");
-              }
-            }}
+            onConfirm={() => GitLoadRepo(repo)}
             closeModal={closeModal}
           />
         ),
@@ -399,7 +422,7 @@ const Map = ({ mapId, codeDataId, mapLabel, isPublicAccess = false }) => {
               <Stack direction='row' height='100%' spacing={2}>
                 <PanelCode selectedNode={selectedNode} codeData={codeData} setCodeData={setCodeData} />
                 <Stack spacing={2}>
-                  <PanelMenu isPublicAccess={isPublicAccess} saveMap={saveMap} TakeScreenshot={takeScreenshot} LoadFromGitMap={LoadFromGitMap} LoadFromFileMap={LoadFromFileMap} githubAccess={session?.github_access_token} repos={repos} />
+                  <PanelMenu GitLoadRepo={GitLoadRepo} isPublicAccess={isPublicAccess} saveMap={saveMap} TakeScreenshot={takeScreenshot} LoadFromGitMap={LoadFromGitMap} LoadFromFileMap={LoadFromFileMap} githubAccess={session?.github_access_token} repos={repos} />
                   <Frame sx={{ width: 'fit-content' }} p={.5}>
                     <IconButton onClick={saveMap} color='primary'><Icon icon='save' color='ui' /></IconButton>
                   </Frame>

@@ -104,7 +104,6 @@ const ProfileForm = () => {
         if (resImg && resImg.image) updateData = { ...updateData, image: resImg.image }
       }
       if (new_errors) {
-        console.log(new_errors);
         setError(new_errors);
         return;
       }
@@ -145,10 +144,10 @@ const ProfileForm = () => {
               <InputButton onClick={LinkProviders('github')} variant={form.github ? 'contained' : 'outlined'} size='large' startIcon='github' fullWidth />
               <InputButton disabled={!form.github} onClick={UnlinkProviders('github')} variant='text' size='small' fullWidth>Отключить</InputButton>
             </Stack>
-            <Stack width='100%' spacing={1}>
+            {/* <Stack width='100%' spacing={1}>
               <InputButton onClick={LinkProviders('google')} variant={form.google ? 'contained' : 'outlined'} size='large' startIcon='google' fullWidth />
               <InputButton disabled={!form.google} onClick={UnlinkProviders('google')} variant='text' size='small' fullWidth>Отключить</InputButton>
-            </Stack>
+            </Stack> */}
           </Stack>
           <InputButton disabled={isChanged} type='submit' variant='contained' size='large' fullWidth>Сохранить</InputButton>
           <InputButton size='small' variant='text' fullWidth onClick={() => { signOut({ callbackUrl: '/' }) }}>Выйти</InputButton>

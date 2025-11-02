@@ -19,9 +19,9 @@ const PopoverMenu: React.FC<PopoverMenuProps> = ({ openButton, children, anchorO
     setAnchorEl(event.currentTarget);
   }, []);
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setAnchorEl(null);
-  }, []);
+  }
 
   const open = Boolean(anchorEl);
   return (
@@ -32,8 +32,11 @@ const PopoverMenu: React.FC<PopoverMenuProps> = ({ openButton, children, anchorO
         anchorEl={anchorEl}
         anchorOrigin={anchorOrigin || { vertical: 'top', horizontal: 'right' }}
         transformOrigin={transformOrigin || { vertical: 'top', horizontal: 'left' }}
+        disableEnforceFocus
+        disableAutoFocus
+        disableRestoreFocus
         {...props}
-        sx={{ pointerEvents: 'none', ...sx }}
+        sx={{  ...sx }}
       >
         <ClickAwayListener onClickAway={handleClose}>
           <Stack p={1} sx={{ ...sxStack, pointerEvents: 'auto' }} {...stack}>{children}</Stack>

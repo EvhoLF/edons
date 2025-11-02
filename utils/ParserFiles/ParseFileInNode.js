@@ -155,9 +155,5 @@ export const ParseFileInNode = async (files) => {
   const newCodeData = validResults.map(result => result.codeData);
 
   const newEdges = createEdges(newNodes);
-
-  console.log(newNodes);
-  console.log(newEdges);
-
   return { newNodes, newEdges, newCodeData };
 };

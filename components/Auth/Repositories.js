@@ -30,9 +30,6 @@ export default function Repositories() {
         });
         const updatedData = await Promise.all(filePromises);
         const nodes = await ParseGitInNode(updatedData);
-        console.log(updatedData);
-        console.log(nodes);
-
       }}>
         Get Rep
       </Button>

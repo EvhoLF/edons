@@ -22,8 +22,8 @@ const ButtonStyle: ButtonStyleProps = {
       position: 'relative',
       gap: '8px',
       transition: 'all .3s',
-      "&:hover": { scale: '1.05' },
-      "&:active": { scale: '1' },
+      // "&:hover": { scale: '1.05' },
+      // "&:active": { scale: '1' },
       "&::before": { zIndex: '-1' },
       ":disabled": { filter: 'grayscale(20%) brightness(50%)' }
     },

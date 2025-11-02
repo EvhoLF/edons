@@ -48,7 +48,6 @@ const NodeTable = ({ id, data }: NodeTable) => {
 
   const addTableField = () => {
     updateNodeData(id, (pre) => {
-      console.log(pre);
       const table_nextIdx = pre.data.table_nextIdx as number;
       const newField = { idx: table_nextIdx, isKey: true, name: 'Field', type: 'string', }
       return { ...pre.data, table: [...pre.data.table as TableField[], newField], table_nextIdx: table_nextIdx + 1 }

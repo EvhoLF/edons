@@ -24,13 +24,11 @@ const LinkAccountForm = () => {
   const mainUserId = searchParams.get('u') || '';
 
 
-  console.log({ session, token: getToken });
 
 
   useEffect(() => {
 
     const getUsers = async () => {
-      console.log(mainUserId);
       if (!mainUserId || !session?.user) return;
       const decrypt_data = decryptDataURI(mainUserId);
       const mainUser = await UserAction.getById(decrypt_data);
@@ -58,7 +56,6 @@ const LinkAccountForm = () => {
         mainUser: mainUserId,
         linkUser: encryptData(users.linkUser?.id)
       }
-      console.log(data);
 
       const response = await fetch("/api/auth/link-account", {
         method: "POST",
