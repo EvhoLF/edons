@@ -84,16 +84,16 @@
 
 <table>
 <tr>
-<td><img src="docs/screenshots/home.png" alt="Главная страница" width="400"/><br/><sub>Главная страница</sub></td>
-<td><img src="docs/screenshots/maps.png" alt="Список карт" width="400"/><br/><sub>Карты пользователя</sub></td>
+<td><img src="screenshots/home.png" alt="Главная страница" width="400"/><br/><sub>Главная страница</sub></td>
+<td><img src="screenshots/maps.png" alt="Список карт" width="400"/><br/><sub>Карты пользователя</sub></td>
 </tr>
 <tr>
-<td><img src="docs/screenshots/editor.png" alt="Редактор карты" width="400"/><br/><sub>Интерактивный редактор схем</sub></td>
-<td><img src="docs/screenshots/admin.png" alt="Админ-панель" width="400"/><br/><sub>Административная панель</sub></td>
+<td><img src="screenshots/editor.png" alt="Редактор карты" width="400"/><br/><sub>Интерактивный редактор схем</sub></td>
+<td><img src="screenshots/admin.png" alt="Админ-панель" width="400"/><br/><sub>Административная панель</sub></td>
 </tr>
 </table>
 
-> Изображения находятся в `docs/screenshots/`. При необходимости замените их актуальными скриншотами интерфейса.
+> Изображения находятся в `screenshots/`. При необходимости замените их актуальными скриншотами интерфейса.
 
 ## Требования
 
